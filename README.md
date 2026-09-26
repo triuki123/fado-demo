@@ -7,8 +7,10 @@ Pinned CDN dependencies: Three.js 0.169.0, GSAP/ScrollTrigger 3.12.5, Lenis 1.1.
 - Scroll or select one of eight navigation dots to travel through one continuous scene.
 - Hover/click headquarters, commerce center, warehouse, ProShip hub, port or airport for destination details. Navigation offers a keyboard-accessible alternative.
 - Pause motion freezes ambient vehicle/water animation. Reduced-motion preference disables the opening move and smooth wheel scrolling.
-- `?debug=true` shows the camera spline, FPS, camera/target coordinates, progress, section and draw statistics.
-- `?quality=high`, `medium` or `low` overrides automatic device quality. Mobile omits postprocessing and uses a wider camera composition.
+- `?debug=true` shows the camera spline, FPS, CSS viewport, device DPR, real drawing-buffer resolution, camera/target coordinates, progress, section and draw statistics.
+- `?debugLayout=true` displays district `Box3` bounds, world coordinates and collision/clearance counts. Green boxes pass; red boxes require attention.
+- `?quality=ultra`, `high`, `medium` or `low` overrides automatic device quality. Ultra targets 4K capture with DPR 2, crisp 2K soft shadows and 16x anisotropic filtering, then reduces render scale if sustained FPS falls below 32.
+- `?renderScale=2` explicitly requests a 2x drawing buffer. Values are clamped from 0.75 to 2 to protect GPU memory.
 
 ## Source map
 
@@ -22,7 +24,7 @@ Pinned CDN dependencies: Three.js 0.169.0, GSAP/ScrollTrigger 3.12.5, Lenis 1.1.
 
 Run `npm run check` for JS syntax and local import validation. Check rendering and console in a WebGL2 browser. High quality targets desktop 60fps; actual frame rate depends on GPU and display resolution. Contact opens a dialog linking to the official FADO website; no invented contact information or backend submission.
 
-The scene uses a local 1K CC0 Poly Haven HDRI for outdoor image-based lighting, with an internal fallback if the file cannot load. High quality enables subtle SSAO and SMAA; Medium omits AO; Low renders directly without post-processing. These switches preserve the same world coordinates and storytelling.
+The scene uses a local 1K CC0 Poly Haven HDRI for outdoor image-based lighting, with an internal fallback if the file cannot load. All quality levels use native WebGL multisampling and direct rendering; this avoids the framebuffer artifacts previously seen when post-processing was combined with camera view offsets. These switches preserve the same world coordinates and storytelling.
 
 ## Blender asset pipeline
 

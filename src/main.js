@@ -1,3 +1,4 @@
+import * as THREE from "three";
 import { getQuality } from "./utils/quality.js";
 import { createScene } from "./core/Scene.js";
 import { createWorld } from "./world/World.js";
@@ -7,6 +8,7 @@ import { createStory } from "./ui/Story.js";
 import { createInteraction } from "./ui/Interaction.js";
 import { configureSurfaceTextures } from "./core/SurfaceTextures.js";
 import { waitForModels } from "./core/ModelAssets.js";
+import { auditLayout } from "./utils/LayoutAudit.js";
 const progress = (p) => {
   document.querySelector("#load-progress").textContent = p + "%";
   document.querySelector("#load-bar").style.width = p + "%";
@@ -16,13 +18,16 @@ async function boot() {
   await new Promise(requestAnimationFrame);
   const quality = getQuality(),
     reduced = matchMedia("(prefers-reduced-motion: reduce)").matches,
-    debug = new URLSearchParams(location.search).get("debug") === "true";
+    params = new URLSearchParams(location.search),
+    debug = params.get("debug") === "true",
+    debugLayout = params.get("debugLayout") === "true";
   const { scene, camera, renderer, render, environmentReady, setRenderScale } =
     createScene(quality);
   configureSurfaceTextures(renderer, quality);
   progress(35);
   await new Promise(requestAnimationFrame);
   const world = createWorld(scene, quality);
+  const layoutAudit = auditLayout(scene, debugLayout);
   await Promise.all([environmentReady, waitForModels()]);
   progress(70);
   const path = createCameraPath(camera, scene, debug),
@@ -43,7 +48,10 @@ async function boot() {
     fpsStart = last,
     lastProgress = 0,
     movingUntil = 0,
-    reducedForMotion = false;
+    reducedForMotion = false,
+    dynamicScale = 1,
+    slowSamples = 0,
+    fastSamples = 0;
   const toggle = document.querySelector("#motion-toggle");
   const label = () => {
     toggle.innerHTML = paused
@@ -57,7 +65,7 @@ async function boot() {
     label();
   };
   const debugPanel = document.querySelector("#debug");
-  debugPanel.hidden = !debug;
+  debugPanel.hidden = !(debug || debugLayout);
   document.querySelector("#loader").classList.add("done");
   setTimeout(
     () => {
@@ -91,7 +99,7 @@ async function boot() {
     lastProgress = scroll.state.progress;
     const moving = now < movingUntil;
     if (moving !== reducedForMotion) {
-      setRenderScale(moving ? quality.motionScale : 1);
+      setRenderScale(dynamicScale * (moving ? quality.motionScale : 1));
       reducedForMotion = moving;
     }
     if (!paused) worldTime += dt;
@@ -108,8 +116,22 @@ async function boot() {
       fps = (frames * 1000) / (now - fpsStart);
       frames = 0;
       fpsStart = now;
-      if (debug)
-        debugPanel.textContent = `QUALITY ${quality.name.toUpperCase()}  FPS ${fps.toFixed(0)}\nSCROLL ${(p * 100).toFixed(1)}%  ${document.querySelector("#district-name").textContent}\nCAMERA ${camera.position
+      if (quality.name === "ultra") {
+        slowSamples = fps < 32 ? slowSamples + 1 : 0;
+        fastSamples = fps > 52 ? fastSamples + 1 : 0;
+        if (slowSamples >= 4 && dynamicScale > 0.7) {
+          dynamicScale = Math.max(0.7, dynamicScale - 0.15);
+          setRenderScale(dynamicScale * (moving ? quality.motionScale : 1));
+          slowSamples = fastSamples = 0;
+        } else if (fastSamples >= 8 && dynamicScale < 1) {
+          dynamicScale = Math.min(1, dynamicScale + 0.1);
+          setRenderScale(dynamicScale * (moving ? quality.motionScale : 1));
+          slowSamples = fastSamples = 0;
+        }
+      }
+      if (debug || debugLayout) {
+        const buffer = renderer.getDrawingBufferSize(new THREE.Vector2());
+        debugPanel.textContent = `QUALITY ${quality.name.toUpperCase()}  FPS ${fps.toFixed(0)}\nVIEWPORT ${innerWidth} × ${innerHeight}  DPR ${devicePixelRatio.toFixed(2)}\nRENDER ${buffer.x} × ${buffer.y}  SCALE ${(buffer.x / innerWidth).toFixed(2)}\nLAYOUT COLLISIONS ${layoutAudit.actualCollisions.length}  CLEARANCE ${layoutAudit.clearanceWarnings.length}\nSCROLL ${(p * 100).toFixed(1)}%  ${document.querySelector("#district-name").textContent}\nCAMERA ${camera.position
           .toArray()
           .map((v) => v.toFixed(1))
           .join(", ")}\nTARGET ${path.look
@@ -118,6 +140,7 @@ async function boot() {
           .join(
             ", ",
           )}\nDRAW CALLS ${renderer.info.render.calls}  TRIANGLES ${renderer.info.render.triangles}`;
+      }
     }
   }
   requestAnimationFrame(tick);

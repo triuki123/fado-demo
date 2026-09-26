@@ -182,16 +182,16 @@ export function beam(parent, a, b, width, material = "orange") {
 }
 export function sign(parent, text, x, y, z, width = 8, color = "#f36c21") {
   const c = document.createElement("canvas");
-  c.width = 768;
-  c.height = 128;
+  c.width = 1536;
+  c.height = 256;
   const ctx = c.getContext("2d");
   ctx.fillStyle = "#f5f2e9";
-  ctx.fillRect(0, 0, 768, 128);
+  ctx.fillRect(0, 0, 1536, 256);
   ctx.fillStyle = color;
-  ctx.font = "700 66px Arial";
+  ctx.font = "700 132px Arial";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  ctx.fillText(text, 384, 68);
+  ctx.fillText(text, 768, 136);
   const tex = new THREE.CanvasTexture(c);
   tex.colorSpace = THREE.SRGBColorSpace;
   const m = new THREE.Mesh(

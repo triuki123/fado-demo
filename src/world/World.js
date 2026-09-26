@@ -22,6 +22,7 @@ import { createAirport } from "./Airport.js";
 import { naturalTree } from "./Details.js";
 import { addEcosystemModel } from "../core/ModelAssets.js";
 import { createTraffic, forklift } from "../objects/Vehicles.js";
+import { spacingRules } from "../utils/LayoutAudit.js";
 export function createWorld(scene, quality) {
   setGeometryQuality(quality.name);
   const world = new THREE.Group();
@@ -37,7 +38,9 @@ export function createWorld(scene, quality) {
     5.4,
   );
   digitalSign.userData.dynamic = technologySign.userData.dynamic = true;
-  const seg = quality.name === "high" ? [36, 28] : [24, 18];
+  const seg = ["ultra", "high"].includes(quality.name)
+    ? [36, 28]
+    : [24, 18];
   const seaGeo = new THREE.PlaneGeometry(260, 220, seg[0], seg[1]);
   const water = new THREE.Mesh(seaGeo, materials.water);
   water.rotation.x = -Math.PI / 2;
@@ -186,7 +189,27 @@ export function createWorld(scene, quality) {
     [-9, 33, 1.9],
     [-1, 39, 1.8],
   ];
+  const buildingSetbacks = [
+    [-30, 14, 17.5, 14.5],
+    [8, -18, 19, 14],
+    [-26, -18, 24.5, 20],
+    [8, 14, 16.5, 11],
+    [-12, 0, 11, 8],
+    [1, 0, 11, 8],
+    [27, 5, 13, 9],
+    [40.5, 7.4, 11, 10],
+    [-37.5, -40, 9, 8],
+    [-23.5, -40, 12, 9],
+  ];
   landscape.forEach(([x, z, h], index) => {
+    if (
+      buildingSetbacks.some(
+        ([bx, bz, bw, bd]) =>
+          Math.abs(x - bx) < bw / 2 + spacingRules.buildingTree &&
+          Math.abs(z - bz) < bd / 2 + spacingRules.buildingTree,
+      )
+    )
+      return;
     const r = Math.abs(Math.sin(x * 12.9898 + z * 78.233) * 43758.5453) % 1;
     scenicTrees.push(
       naturalTree(world, x, z, h * (0.9 + r * 0.18), index),

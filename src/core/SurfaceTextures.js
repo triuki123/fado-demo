@@ -36,6 +36,9 @@ function surfaceTexture(size, base, variation, seed, repeat) {
   texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
   texture.repeat.set(repeat, repeat);
   texture.colorSpace = THREE.SRGBColorSpace;
+  texture.generateMipmaps = true;
+  texture.minFilter = THREE.LinearMipmapLinearFilter;
+  texture.magFilter = THREE.LinearFilter;
   texture.needsUpdate = true;
   return texture;
 }
@@ -62,6 +65,9 @@ function bumpTexture(size, strength, seed, repeat) {
   );
   texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
   texture.repeat.set(repeat, repeat);
+  texture.generateMipmaps = true;
+  texture.minFilter = THREE.LinearMipmapLinearFilter;
+  texture.magFilter = THREE.LinearFilter;
   texture.needsUpdate = true;
   return texture;
 }
@@ -77,7 +83,7 @@ function applySurface(material, colorMap, bumpMap, bumpScale, anisotropy) {
 export function configureSurfaceTextures(renderer, quality) {
   const size = quality.textureSize;
   const anisotropy = Math.min(
-    quality.name === "high" ? 8 : 4,
+    quality.anisotropy,
     renderer.capabilities.getMaxAnisotropy(),
   );
   const specs = {

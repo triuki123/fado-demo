@@ -23,8 +23,11 @@ export function createScene(quality) {
     alpha: true,
     powerPreference: "high-performance",
   });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, quality.dpr));
-  const basePixelRatio = Math.min(devicePixelRatio, quality.dpr);
+  const basePixelRatio =
+    quality.name === "ultra" || quality.explicitScale
+      ? quality.dpr
+      : Math.min(devicePixelRatio, quality.dpr);
+  renderer.setPixelRatio(basePixelRatio);
   renderer.setSize(innerWidth, innerHeight);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -58,11 +61,12 @@ export function createScene(quality) {
   sun.position.set(-52, 74, 36);
   sun.castShadow = true;
   sun.shadow.mapSize.setScalar(quality.shadow);
+  const shadowExtent = quality.name === "ultra" ? 62 : 66;
   Object.assign(sun.shadow.camera, {
-    left: -66,
-    right: 66,
-    top: 66,
-    bottom: -66,
+    left: -shadowExtent,
+    right: shadowExtent,
+    top: shadowExtent,
+    bottom: -shadowExtent,
     near: 1,
     far: 200,
   });

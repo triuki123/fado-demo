@@ -66,13 +66,16 @@ try {
       await page.getByRole("button", { name: "Close details" }).click();
     }
     for (const label of [
-      "TRUNG TÂM ĐIỀU PHỐI",
-      "ĐIỂM GIAO DỊCH",
-      "KHU VỰC TÀI SẢN",
-      "TRUNG TÂM VẬN HÀNH",
-      "KHU VỰC LOGISTICS",
-      "ĐIỂM KẾT NỐI",
-      "FADO",
+      "FADO ECOSYSTEM",
+      "FADO GROUP HQ",
+      "FADO COMMERCE",
+      "FADO DIGITAL",
+      "FADO TECHNOLOGY",
+      "FADO FULFILLMENT",
+      "FADO LOGISTICS",
+      "PROSHIP LOGISTICS",
+      "GLOBAL DELIVERY",
+      "FADO GROUP",
     ]) {
       await page.getByRole("button", { name: label, exact: true }).click();
       await page.waitForFunction(

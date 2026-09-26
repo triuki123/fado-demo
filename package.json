@@ -8,6 +8,7 @@
     "check": "node scripts/check.mjs",
     "test:browser": "node scripts/browser-check.mjs",
     "test:journey": "node scripts/journey-check.mjs",
+    "test:quality": "node scripts/quality-check.mjs",
     "build:models": "node scripts/build-models.mjs",
     "format": "prettier --write index.html style.css app.js src scripts"
   },
