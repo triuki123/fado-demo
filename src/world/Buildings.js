@@ -67,13 +67,13 @@ export function createCommerce(world) {
   return g;
 }
 export function createWarehouse(world) {
-  const g = district(world, -26, -18, "FADO Distribution", 0.48);
+  const g = district(world, -26, -18, "FADO Agri", 0.48);
   box(g, 0, 0, 0, 22, 0.3, 18, "concrete", 0.5);
   box(g, 0, 0.3, -1, 19, 5.2, 12, "white", 0.25);
   const roof = box(g, 0, 5.5, -1, 20, 0.4, 13, "metal", 0.15);
   roof.rotation.z = 0.035;
   box(g, 0, 4.2, 5.08, 19, 0.5, 0.2, "orange");
-  sign(g, "FADO", 0, 4.9, 5.25, 4.5);
+  sign(g, "FADO Agri", 0, 4.9, 5.25, 5.5);
   for (let x = -7.5; x <= 7.5; x += 3.75) {
     box(g, x, 0.5, 5.05, 2.8, 3, 0.2, "dark");
     box(g, x, 0.4, 6, 3.1, 0.4, 2, "metal");
