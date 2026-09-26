@@ -236,7 +236,7 @@ export function createAirport(world) {
   return {
     group: g,
     update(time, progress) {
-      const airportActive = progress >= 0.72 && progress < 0.87;
+      const airportActive = progress >= 0.79 && progress < 0.92;
       if (airportActive && !wasAirportActive) landingStart = time;
       wasAirportActive = airportActive;
       // Entering the airport chapter always begins with an approach. Once the

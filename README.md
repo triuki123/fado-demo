@@ -33,8 +33,13 @@ spacing and animation remain unchanged.
 
 The same build now exports the static FADO ecosystem campus: six distinct
 supporting facilities, three shared landscape zones, a central plaza and
-pedestrian connections. Major district coordinates, roads and camera paths are
-unchanged.
+pedestrian connections. Core landmark coordinates and the outer road remain
+unchanged; secondary campus placement is composed around the scroll journey.
+
+The scroll story is configured in `src/animation/JourneyData.js`. Each stop
+defines its progress, camera position, target, field of view and UI copy. Camera
+and story navigation consume this same data, including dedicated Digital and
+Technology destinations and a final aerial overview.
 
 ## Browser verification
 

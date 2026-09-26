@@ -1,25 +1,12 @@
 import * as THREE from "three";
+import { journeyStops } from "./JourneyData.js";
 // Positions and independently sampled look targets. Timing is shared by UI and scroll.
 // Each chapter dwells on its focal building, then travels to the next.
-export const cameraPoints = [
-  { at: 0, position: [112, 100, 142], target: [8, 0, -2] },
-  { at: 0.13, position: [112, 100, 142], target: [8, 0, -2] },
-  { at: 0.15, position: [-2, 30, 50], target: [-30, 6, 14] },
-  { at: 0.255, position: [-2, 30, 50], target: [-30, 6, 14] },
-  { at: 0.28, position: [30, 18, 8], target: [8, 3, -18] },
-  { at: 0.395, position: [30, 18, 8], target: [8, 3, -18] },
-  { at: 0.42, position: [-4, 18, 8], target: [-26, 3, -15] },
-  { at: 0.525, position: [-4, 18, 8], target: [-26, 3, -15] },
-  { at: 0.55, position: [26, 14, 34], target: [8, 3, 14] },
-  { at: 0.585, position: [26, 14, 34], target: [8, 3, 14] },
-  { at: 0.61, position: [66, 20, 54], target: [38, 5, 32] },
-  { at: 0.715, position: [66, 20, 54], target: [38, 5, 32] },
-  { at: 0.74, position: [58, 24, -72], target: [17, 2.2, -47] },
-  { at: 0.855, position: [58, 24, -72], target: [17, 2.2, -47] },
-  { at: 0.88, position: [86, 60, 60], target: [8, 0, -8] },
-  { at: 0.97, position: [86, 60, 60], target: [8, 0, -8] },
-  { at: 1, position: [112, 100, 142], target: [8, 0, -2] },
-];
+export const cameraPoints = journeyStops.flatMap((stop, index) => {
+  if (index === journeyStops.length - 1) return [stop];
+  const interval = journeyStops[index + 1].at - stop.at;
+  return [stop, { ...stop, at: stop.at + interval * 0.52 }];
+});
 export function createCameraPath(camera, scene, debug) {
   const curve = new THREE.CatmullRomCurve3(
     cameraPoints.map((p) => new THREE.Vector3(...p.position)),
@@ -64,6 +51,13 @@ export function createCameraPath(camera, scene, debug) {
         s = (index + u) / (cameraPoints.length - 1);
       desiredPosition.copy(curve.getPoint(s));
       aim.copy(targets.getPoint(s));
+      camera.fov = THREE.MathUtils.damp(
+        camera.fov,
+        THREE.MathUtils.lerp(a.fov, b.fov, u),
+        reduce ? 18 : 6,
+        dt,
+      );
+      camera.updateProjectionMatrix();
       const mobile = innerWidth < 600;
       if (mobile) {
         desiredPosition.sub(aim).multiplyScalar(1.3).add(aim);

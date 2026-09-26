@@ -73,10 +73,10 @@ export function createWorld(scene, quality) {
   }
   createRoads(world);
   for (const bridgePoints of [
-    [[-3, 0.4, 31], [-3, 0.75, 28], [-3, 0.4, 25]],
+    [[-19, 0.4, 1], [-18, 0.72, 2], [-17, 0.4, 3]],
+    [[-1, 0.4, -6], [-2, 0.72, -7], [-3, 0.4, -8]],
     [[23, 0.4, 10], [21.5, 0.72, 11], [20, 0.4, 12]],
     [[-31, 0.4, -33], [-30, 0.75, -31], [-28, 0.4, -29]],
-    [[-12, 0.4, 0], [-14.5, 0.68, 1], [-17, 0.4, 3]],
   ]) {
     const curve = new THREE.CatmullRomCurve3(
       bridgePoints.map((point) => new THREE.Vector3(...point)),
@@ -161,9 +161,9 @@ export function createWorld(scene, quality) {
     [22, -57, 2.8],
     [46, -57, 3.1],
     [42, -36, 2.4],
-    [-13, 35, 2.2],
-    [-2, 42, 2.1],
-    [10, 35, 2.2],
+    [-17, -4, 2.2],
+    [-7, 5, 2.1],
+    [6, -4, 2.2],
     [25, 2, 2.3],
     [27, 14, 2.1],
     [43, 2, 2.2],
@@ -171,8 +171,8 @@ export function createWorld(scene, quality) {
     [-42, -36, 2.25],
     [-34, -44, 2.1],
     [-20, -36, 2.2],
-    [-8, -4, 1.9],
-    [-3, 3, 1.8],
+    [-9, 33, 1.9],
+    [-1, 39, 1.8],
   ];
   landscape.forEach(([x, z, h], index) => {
     const r = Math.abs(Math.sin(x * 12.9898 + z * 78.233) * 43758.5453) % 1;
@@ -234,7 +234,7 @@ export function createWorld(scene, quality) {
     for (const dx of [-0.09, 0.09])
       box(world, x + dx, 0.2, -24, 0.08, 0.3, 0.12, "dark");
   }
-  const routeMat = new THREE.MeshStandardMaterial({
+  const routeBase = new THREE.MeshStandardMaterial({
     color: 0xf36c21,
     emissive: 0xf36c21,
     emissiveIntensity: 1.5,
@@ -242,10 +242,13 @@ export function createWorld(scene, quality) {
     opacity: 0.18,
   });
   const routes = [],
+    routeMaterials = [],
     dots = [];
   const centers = [
     [-30, 2, 14],
     [8, 2, -18],
+    [1, 2, 0],
+    [-12, 2, 0],
     [-26, 2, -18],
     [8, 2, 14],
     [42, 2, 34],
@@ -258,10 +261,13 @@ export function createWorld(scene, quality) {
       mid = a.clone().lerp(b, 0.5);
     mid.y = 12;
     const curve = new THREE.CatmullRomCurve3([a, mid, b]);
+    const routeMaterial = routeBase.clone();
+    routeMaterial.opacity = 0.08;
+    routeMaterials.push(routeMaterial);
     world.add(
       new THREE.Mesh(
         new THREE.TubeGeometry(curve, 40, 0.045, 5, false),
-        routeMat,
+        routeMaterial,
       ),
     );
     routes.push(curve);
@@ -338,8 +344,17 @@ export function createWorld(scene, quality) {
       routes.forEach((c, i) =>
         dots[i].position.copy(c.getPointAt((time * 0.06 + i * 0.2) % 1)),
       );
-      routeMat.opacity =
-        0.12 + THREE.MathUtils.smoothstep(progress, 0.85, 1) * 0.7;
+      const routeStarts = [0.1, 0.21, 0.31, 0.4, 0.5, 0.61, 0.71];
+      routeMaterials.forEach((material, i) => {
+        material.opacity =
+          0.06 +
+          THREE.MathUtils.smoothstep(
+            progress,
+            routeStarts[i],
+            routeStarts[i] + 0.055,
+          ) *
+            0.48;
+      });
       particles.rotation.y = time * 0.002;
     },
   };

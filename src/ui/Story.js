@@ -1,4 +1,8 @@
-export const chapters = [
+import { journeyStops } from "../animation/JourneyData.js";
+
+export const chapters = journeyStops;
+/* legacy copy retained in git history
+const previousChapters = [
   {
     at: 0,
     name: "VẬN HÀNH KẾT NỐI",
@@ -62,16 +66,16 @@ export const chapters = [
     title: "DỮ LIỆU.<br>QUY TRÌNH.<br><em>HÀNH ĐỘNG.</em>",
     description: "FADO — Intelligent Business Operations Platform.",
   },
-];
+]; */
 export function createStory(scroll) {
-  let current = 0,
+  let current = -1,
     pending;
   const nav = document.querySelector("#destinations");
   chapters.forEach((c, i) => {
     const b = document.createElement("button");
     b.innerHTML = `<span>${c.name}</span><i></i>`;
     b.setAttribute("aria-label", c.name);
-    b.onclick = () => scroll.go(i === 7 ? 1 : c.at + 0.035);
+    b.onclick = () => scroll.go(i === chapters.length - 1 ? 1 : c.at + 0.025);
     nav.append(b);
   });
   document.querySelectorAll("[data-go]").forEach(
@@ -96,7 +100,7 @@ export function createStory(scroll) {
     scroll.go(0);
   };
   document.querySelector("#explore").onclick = () =>
-    current === 7
+    current === chapters.length - 1
       ? document.querySelector("#contact").showModal()
       : scroll.go(chapters[current + 1].at + 0.035);
   const contact = document.querySelector("#contact");
@@ -128,17 +132,23 @@ export function createStory(scroll) {
     btnPrev.onclick = () => {
       const prevIdx = Math.max(0, current - 1);
       scroll.go(
-        prevIdx === 7 ? 1 : chapters[prevIdx].at + (prevIdx === 0 ? 0 : 0.035),
+        prevIdx === chapters.length - 1
+          ? 1
+          : chapters[prevIdx].at + (prevIdx === 0 ? 0 : 0.025),
       );
     };
   }
   if (btnNext) {
     btnNext.onclick = () => {
-      if (current === 7) {
+      if (current === chapters.length - 1) {
         document.querySelector("#contact").showModal();
       } else {
         const nextIdx = Math.min(chapters.length - 1, current + 1);
-        scroll.go(nextIdx === 7 ? 1 : chapters[nextIdx].at + 0.035);
+        scroll.go(
+          nextIdx === chapters.length - 1
+            ? 1
+            : chapters[nextIdx].at + 0.025,
+        );
       }
     };
   }
@@ -175,7 +185,7 @@ export function createStory(scroll) {
         "0",
       );
       document.querySelector("#explore").innerHTML =
-        current === 7
+        current === chapters.length - 1
           ? "KHÁM PHÁ FADO <span>↗</span>"
           : "TIẾP TỤC KHÁM PHÁ <span>↗</span>";
       story.classList.remove("changing");

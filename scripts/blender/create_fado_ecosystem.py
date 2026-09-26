@@ -67,25 +67,25 @@ def slab_stack(x, z, width, depth, floors, step=0.0):
         cube("Floor slab", world(x + ox, z, 1.42 + floor * 1.25), (width + 0.25, depth + 0.25, 0.18), WHITE, 0.07)
 
 # Three shared landscaped campuses; large water corridors remain open.
-pad(-3, 38, 28, 14)
+pad(-6, 0, 28, 14)
 pad(34, 8, 22, 18)
 pad(-31, -40, 28, 14)
 
 # North technology facility: elliptical curtain wall with a finned crown.
 for floor in range(3):
-    cyl("Technology glass ring", world(-9, 38, 0.65 + floor * 1.35), 3.2, 1.12, GLASS, 40, (1.35, 0.72, 1))
-    cyl("Technology slab", world(-9, 38, 1.27 + floor * 1.35), 3.3, 0.16, WHITE, 40, (1.38, 0.75, 1))
+    cyl("Technology glass ring", world(-12, 0, 0.65 + floor * 1.35), 3.2, 1.12, GLASS, 40, (1.35, 0.72, 1))
+    cyl("Technology slab", world(-12, 0, 1.27 + floor * 1.35), 3.3, 0.16, WHITE, 40, (1.38, 0.75, 1))
 for angle in range(0, 360, 30):
     r = math.radians(angle)
-    cube("Technology fin", world(-9 + math.cos(r)*4.45, 38 + math.sin(r)*2.42, 2.3), (0.12, 0.18, 4.35), CHARCOAL, 0.025)
-cube("Technology canopy", world(-9, 34.9, 1.15), (5.8, 2.0, 0.22), ORANGE, 0.22)
+    cube("Technology fin", world(-12 + math.cos(r)*4.45, math.sin(r)*2.42, 2.3), (0.12, 0.18, 4.35), CHARCOAL, 0.025)
+cube("Technology canopy", world(-12, -3.1, 1.15), (5.8, 2.0, 0.22), ORANGE, 0.22)
 
 # North digital commerce facility: stepped terraces and recessed glass floors.
-slab_stack(5.5, 38.2, 7.8, 5.8, 2, 0.55)
-cube("Commerce terrace", world(6.6, 38.2, 3.0), (6.2, 4.5, 0.3), GREEN, 0.35)
-cube("Commerce cantilever", world(5.7, 34.8, 2.1), (8.6, 1.4, 0.28), ORANGE, 0.2)
-for x in [2.2, 4.5, 6.8, 9.1]:
-    cube("Commerce louver", world(x, 35.35, 1.45), (0.11, 0.18, 2.5), CHARCOAL, 0.02)
+slab_stack(1, 0.2, 7.8, 5.8, 2, 0.55)
+cube("Commerce terrace", world(2.1, 0.2, 3.0), (6.2, 4.5, 0.3), GREEN, 0.35)
+cube("Commerce cantilever", world(1.2, -3.2, 2.1), (8.6, 1.4, 0.28), ORANGE, 0.2)
+for x in [-2.3, 0, 2.3, 4.6]:
+    cube("Commerce louver", world(x, -2.65, 1.45), (0.11, 0.18, 2.5), CHARCOAL, 0.02)
 
 # East customer experience center: curved low pavilion and reflecting pool.
 cyl("Experience pavilion", world(29.5, 5.0, 1.0), 3.8, 1.75, GLASS, 48, (1.35, 0.75, 1))
@@ -115,15 +115,15 @@ for x in [-27.3, -25.45, -23.6, -21.75]:
     cube("Logistics facade bay", world(x, -36.92, 1.25), (1.45, 0.12, 1.65), GLASS, 0.05)
 
 # Central plaza creates a public focal point without occupying much water.
-cyl("Central plaza", world(-7, 0, 0.04), 5.0, 0.22, STONE, 48, (1.35, 0.8, 1))
-cyl("Central lawn", world(-7, 0, 0.17), 3.35, 0.08, GREEN, 48, (1.25, 0.72, 1))
-cyl("FADO sculpture base", world(-7, 0, 0.48), 0.75, 0.72, CHARCOAL, 32)
+cyl("Central plaza", world(-5, 36, 0.04), 5.0, 0.22, STONE, 48, (1.35, 0.8, 1))
+cyl("Central lawn", world(-5, 36, 0.17), 3.35, 0.08, GREEN, 48, (1.25, 0.72, 1))
+cyl("FADO sculpture base", world(-5, 36, 0.48), 0.75, 0.72, CHARCOAL, 32)
 for angle in [-22, 22]:
-    p = cube("FADO sculpture", world(-7, 0, 2.1), (0.24, 0.5, 3.2), ORANGE, 0.05)
+    p = cube("FADO sculpture", world(-5, 36, 2.1), (0.24, 0.5, 3.2), ORANGE, 0.05)
     p.rotation_euler[1] = math.radians(angle)
 
 # Benches and low architectural lights establish human scale.
-for x, z in [(-5,35), (1,35), (27,13), (36,15), (-33,-36), (-27,-36), (-11,0), (-3,0)]:
+for x, z in [(-15,-4), (4,-4), (27,13), (36,15), (-33,-36), (-27,-36), (-9,34), (-1,34)]:
     cube("Campus bench", world(x, z, 0.38), (1.6, 0.48, 0.18), CHARCOAL, 0.06)
     cube("Bench support", world(x, z, 0.18), (1.15, 0.3, 0.35), STONE, 0.05)
 
