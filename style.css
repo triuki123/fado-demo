@@ -103,8 +103,8 @@ header.scrolled {
   width: 146px;
   height: 38px;
   background: var(--orange);
-  -webkit-mask: url("assets/fado-logo.png") center / 126% 492% no-repeat;
-  mask: url("assets/fado-logo.png") center / 126% 492% no-repeat;
+  -webkit-mask: url("assets/fado-logo.png") center / 118% 460% no-repeat;
+  mask: url("assets/fado-logo.png") center / 118% 460% no-repeat;
 }
 .loader-brand {
   width: min(66vw, 390px);
