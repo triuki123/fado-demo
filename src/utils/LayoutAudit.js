@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 export const spacingRules = Object.freeze({
-  buildingBuilding: 3,
+  buildingBuilding: 6,
   buildingTree: 1.25,
   buildingRoad: 2,
   treeTree: 1.2,
@@ -14,12 +14,12 @@ export const layoutZones = [
   { name: "FADO Commerce", center: [8, 4, -18], size: [17, 8, 12] },
   { name: "FADO Fulfillment", center: [-26, 3.5, -18], size: [22, 7, 18] },
   { name: "FADO Logistics", center: [8, 3, 14], size: [15, 6, 9] },
-  { name: "FADO Technology", center: [-12, 2.4, 0], size: [9, 5, 5.5] },
-  { name: "FADO Digital", center: [1, 1.8, 0], size: [8.6, 3.6, 6] },
-  { name: "Experience Center", center: [27, 1.2, 5], size: [11.6, 2.4, 6.5] },
-  { name: "Partner Center", center: [40.5, 1.8, 7.4], size: [7.9, 3.6, 8] },
-  { name: "Trade Office", center: [-37.5, 3, -40], size: [6.2, 6, 5.5] },
-  { name: "Support Office", center: [-23.5, 1.8, -40], size: [9, 3.6, 6.5] },
+  { name: "FADO Technology", center: [-11, 2.4, 4], size: [9, 5, 5.5] },
+  { name: "FADO Digital", center: [4, 1.8, 0], size: [8.6, 3.6, 6] },
+  { name: "Experience Center", center: [28, 1.2, 0], size: [11.6, 2.4, 6.5] },
+  { name: "Partner Center", center: [46, 1.8, 9], size: [7.9, 3.6, 8] },
+  { name: "Trade Office", center: [-40, 3, -40], size: [6.2, 6, 5.5] },
+  { name: "Support Office", center: [-20, 1.8, -40], size: [9, 3.6, 6.5] },
   { name: "ProShip Port", center: [40, 5, 32], size: [31, 10, 15] },
   { name: "FADO Solutions", center: [28, 3, -38], size: [27, 6, 10] },
 ];

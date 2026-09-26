@@ -28,13 +28,13 @@ export function createWorld(scene, quality) {
   const world = new THREE.Group();
   scene.add(world);
   addEcosystemModel(world);
-  const digitalSign = sign(world, "FADO DIGITAL", 1, 2.35, 3.28, 4.8);
+  const digitalSign = sign(world, "FADO DIGITAL", 4, 2.35, 3.28, 4.8);
   const technologySign = sign(
     world,
     "FADO TECHNOLOGY",
-    -12,
+    -11,
     2.6,
-    3.18,
+    7.18,
     5.4,
   );
   digitalSign.userData.dynamic = technologySign.userData.dynamic = true;
@@ -194,12 +194,12 @@ export function createWorld(scene, quality) {
     [8, -18, 19, 14],
     [-26, -18, 24.5, 20],
     [8, 14, 16.5, 11],
-    [-12, 0, 11, 8],
-    [1, 0, 11, 8],
-    [27, 5, 13, 9],
-    [40.5, 7.4, 11, 10],
-    [-37.5, -40, 9, 8],
-    [-23.5, -40, 12, 9],
+    [-11, 4, 11, 8],
+    [4, 0, 11, 8],
+    [28, 0, 13, 9],
+    [46, 9, 11, 10],
+    [-40, -40, 9, 8],
+    [-20, -40, 12, 9],
   ];
   landscape.forEach(([x, z, h], index) => {
     if (
@@ -284,8 +284,8 @@ export function createWorld(scene, quality) {
   const centers = [
     [-30, 2, 14],
     [8, 2, -18],
-    [1, 2, 0],
-    [-12, 2, 0],
+    [4, 2, 0],
+    [-11, 2, 4],
     [-26, 2, -18],
     [8, 2, 14],
     [42, 2, 34],
