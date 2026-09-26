@@ -100,15 +100,15 @@ header.scrolled {
 }
 .logo-mark {
   display: block;
-  width: 146px;
-  height: 38px;
+  width: 170px;
+  height: 42px;
   background: var(--orange);
-  -webkit-mask: url("assets/fado-logo.png") center / 118% 460% no-repeat;
-  mask: url("assets/fado-logo.png") center / 118% 460% no-repeat;
+  -webkit-mask: url("assets/fado-logo.png") center / 100% auto no-repeat;
+  mask: url("assets/fado-logo.png") center / 100% auto no-repeat;
 }
 .loader-brand {
-  width: min(66vw, 390px);
-  height: min(17vw, 100px);
+  width: min(78vw, 460px);
+  height: min(20vw, 118px);
   transition: transform 1s;
 }
 .loader-brand .logo-mark {
