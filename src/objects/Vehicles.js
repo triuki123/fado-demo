@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { box, cylinder, materials, mergeStatic } from "../world/primitives.js";
+import { replaceWithTruckModel } from "../core/ModelAssets.js";
 
 function truckCab(color) {
   const shape = new THREE.Shape();
@@ -68,6 +69,7 @@ export function truck(parent, kind = "truck", color = "orange") {
   for (const x of [-0.5, 0.5])
     box(g, x, 0.85, length / 2 + 1.13, 0.23, 0.16, 0.05, "light", 0.025);
   mergeStatic(g);
+  replaceWithTruckModel(g);
   return g;
 }
 export function forklift(parent) {

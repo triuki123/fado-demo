@@ -6,6 +6,7 @@ import { createScrollController } from "./animation/ScrollController.js";
 import { createStory } from "./ui/Story.js";
 import { createInteraction } from "./ui/Interaction.js";
 import { configureSurfaceTextures } from "./core/SurfaceTextures.js";
+import { waitForModels } from "./core/ModelAssets.js";
 const progress = (p) => {
   document.querySelector("#load-progress").textContent = p + "%";
   document.querySelector("#load-bar").style.width = p + "%";
@@ -22,7 +23,7 @@ async function boot() {
   progress(35);
   await new Promise(requestAnimationFrame);
   const world = createWorld(scene, quality);
-  await environmentReady;
+  await Promise.all([environmentReady, waitForModels()]);
   progress(70);
   const path = createCameraPath(camera, scene, debug),
     scroll = createScrollController(reduced),

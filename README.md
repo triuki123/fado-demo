@@ -2,7 +2,7 @@
 
 Run `npm run dev` (PowerShell: `npm.cmd run dev`) and open **http://127.0.0.1:5173**. Node 18+ required; no installation or build step. ES modules must be served over HTTP, not opened using file://.
 
-Pinned CDN dependencies: Three.js 0.169.0, GSAP/ScrollTrigger 3.12.5, Lenis 1.1.18. Internet access is required for these libraries and the optional Manrope font; Arial is the font fallback. All architecture and vehicles are procedural; no external model assets.
+Pinned CDN dependencies: Three.js 0.169.0, GSAP/ScrollTrigger 3.12.5, Lenis 1.1.18. Internet access is required for these libraries and the optional Manrope font; Arial is the font fallback. Hero vehicles can be loaded from local Blender-authored GLB assets.
 
 - Scroll or select one of eight navigation dots to travel through one continuous scene.
 - Hover/click headquarters, commerce center, warehouse, ProShip hub, port or airport for destination details. Navigation offers a keyboard-accessible alternative.
@@ -23,6 +23,13 @@ Pinned CDN dependencies: Three.js 0.169.0, GSAP/ScrollTrigger 3.12.5, Lenis 1.1.
 Run `npm run check` for JS syntax and local import validation. Check rendering and console in a WebGL2 browser. High quality targets desktop 60fps; actual frame rate depends on GPU and display resolution. Contact opens a dialog linking to the official FADO website; no invented contact information or backend submission.
 
 The scene uses a local 1K CC0 Poly Haven HDRI for outdoor image-based lighting, with an internal fallback if the file cannot load. High quality enables subtle SSAO and SMAA; Medium omits AO; Low renders directly without post-processing. These switches preserve the same world coordinates and storytelling.
+
+## Blender asset pipeline
+
+Blender source files and exported GLB models live in `assets/models`. Run
+`npm run build:models` after editing the generator or Blender source. Three.js
+loads the GLB into the existing logical vehicle anchors, so traffic paths,
+spacing and animation remain unchanged.
 
 ## Browser verification
 
