@@ -10,9 +10,33 @@ export function getQuality() {
   return {
     name,
     ...{
-      high: { dpr: 1.65, shadow: 2048, particles: 100, post: true },
-      medium: { dpr: 1.4, shadow: 1024, particles: 55, post: true },
-      low: { dpr: 1.2, shadow: 512, particles: 24, post: false },
+      high: {
+        dpr: 1.65,
+        shadow: 2048,
+        particles: 100,
+        post: true,
+        ao: true,
+        aa: true,
+        textureSize: 512,
+      },
+      medium: {
+        dpr: 1.35,
+        shadow: 1024,
+        particles: 55,
+        post: true,
+        ao: false,
+        aa: true,
+        textureSize: 256,
+      },
+      low: {
+        dpr: 1,
+        shadow: 512,
+        particles: 24,
+        post: false,
+        ao: false,
+        aa: false,
+        textureSize: 128,
+      },
     }[name],
   };
 }

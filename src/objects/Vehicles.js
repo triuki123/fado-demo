@@ -67,6 +67,8 @@ export function createPlane(parent) {
     materials.white,
   );
   body.rotation.x = Math.PI / 2;
+  body.castShadow = true;
+  body.receiveShadow = true;
   g.add(body);
   const wingShape = new THREE.Shape();
   wingShape.moveTo(-0.3, 1);
@@ -89,10 +91,19 @@ export function createPlane(parent) {
     materials.white,
   );
   wings.rotation.x = Math.PI / 2;
+  wings.castShadow = true;
   g.add(wings);
   box(g, 0, 0.3, -2.8, 0.15, 1.8, 1.1, "orange", 0.1);
   box(g, 0, 0.1, -2.7, 3.2, 0.1, 0.8, "white");
   box(g, 0, 0.32, 2.5, 0.8, 0.15, 0.6, "glass");
+  // Recessed cockpit/cargo glazing and a restrained FADO fuselage stripe.
+  for (let z = -1.75; z <= 1.65; z += 0.55) {
+    box(g, -0.545, 0.12, z, 0.025, 0.14, 0.24, "glass", 0.01);
+    box(g, 0.545, 0.12, z, 0.025, 0.14, 0.24, "glass", 0.01);
+  }
+  box(g, -0.555, -0.02, 0, 0.018, 0.07, 4.75, "orange", 0.005);
+  box(g, 0.555, -0.02, 0, 0.018, 0.07, 4.75, "orange", 0.005);
+  box(g, -0.56, -0.15, -1.55, 0.025, 0.72, 1.05, "dark", 0.015);
   for (const x of [-1.8, 1.8]) {
     const engine = new THREE.Mesh(
       new THREE.CylinderGeometry(0.3, 0.36, 1.4, 12),
@@ -100,6 +111,7 @@ export function createPlane(parent) {
     );
     engine.rotation.x = Math.PI / 2;
     engine.position.set(x, -0.4, -0.1);
+    engine.castShadow = true;
     g.add(engine);
   }
   // Landing gear remains visible during the airport sequence. The wheels sit

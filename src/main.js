@@ -5,6 +5,7 @@ import { createCameraPath } from "./animation/CameraPath.js";
 import { createScrollController } from "./animation/ScrollController.js";
 import { createStory } from "./ui/Story.js";
 import { createInteraction } from "./ui/Interaction.js";
+import { configureSurfaceTextures } from "./core/SurfaceTextures.js";
 const progress = (p) => {
   document.querySelector("#load-progress").textContent = p + "%";
   document.querySelector("#load-bar").style.width = p + "%";
@@ -15,10 +16,13 @@ async function boot() {
   const quality = getQuality(),
     reduced = matchMedia("(prefers-reduced-motion: reduce)").matches,
     debug = new URLSearchParams(location.search).get("debug") === "true";
-  const { scene, camera, renderer, render } = createScene(quality);
+  const { scene, camera, renderer, render, environmentReady } =
+    createScene(quality);
+  configureSurfaceTextures(renderer, quality);
   progress(35);
   await new Promise(requestAnimationFrame);
   const world = createWorld(scene, quality);
+  await environmentReady;
   progress(70);
   const path = createCameraPath(camera, scene, debug),
     scroll = createScrollController(reduced),

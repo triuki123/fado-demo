@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { box, beam, instances, materials, sign } from "./primitives.js";
 import { district } from "./Buildings.js";
+import { rail, contactShadow } from "./Details.js";
 export function createPort(world) {
   const g = district(world, 42, 34, "FADO Harbor", 0.66);
   box(g, -2, 0, -2, 29, 0.6, 13, "concrete", 0.4);
@@ -42,6 +43,8 @@ export function createPort(world) {
       beam(crane, [a, 17, -1], [a, 13, 11], 0.16);
       box(crane, a, 0.4, -1, 0.8, 0.5, 3, "dark");
     }
+    beam(crane, [-2, 1, -1], [2, 12, 0], 0.11, "metal");
+    beam(crane, [2, 1, -1], [-2, 12, 0], 0.11, "metal");
     beam(crane, [-2, 12.5, 0], [2, 12.5, 0], 0.6);
     const trolley = new THREE.Group();
     crane.add(trolley);
@@ -72,23 +75,35 @@ export function createPort(world) {
     materials.dark,
   );
   hull.rotation.x = -Math.PI / 2;
+  hull.castShadow = true;
+  hull.receiveShadow = true;
   ship.add(hull);
+  box(ship, -1, 1.82, 0, 24, 0.18, 5.25, "white", 0.08);
+  box(ship, -1, 1.55, 2.68, 23, 0.18, 0.12, "orange", 0.025);
   box(ship, -10, 2, 0, 4, 4.5, 4.7, "white", 0.3);
   box(ship, -10, 5, 0, 4.4, 0.85, 5, "glass", 0.2);
   box(ship, -10, 6.5, 0, 1.4, 1.5, 1.4, "orange");
+  for (const z of [-1.65, 1.65])
+    for (let x = -11.3; x <= -8.7; x += 0.65)
+      box(ship, x, 4.2, z, 0.34, 0.26, 0.05, "glass", 0.015);
+  for (const x of [-10.5, -9.5])
+    cylinder(ship, x, 7.8, 0, 0.22, 1.2, "dark", 0.18, 14);
+  rail(ship, [-7, 2.65], [10, 2.65], 2.75, 1.9);
+  rail(ship, [-7, -2.65], [10, -2.65], 2.75, 1.9);
   for (let x = -5; x < 10; x += 4)
     for (const z of [-1.4, 1.4])
       box(ship, x, 2, z, 3.7, 1.5, 2.2, x + z > 3 ? "blue" : "orange");
   sign(ship, "FADO", 1, 0.9, 3.42, 4.5);
+  for (let x = -14; x <= 10; x += 4) {
+    cylinder(g, x, 0.62, 4.1, 0.22, 0.42, "dark", 0.26, 12);
+    cylinder(g, x, 1.04, 4.1, 0.3, 0.12, "dark", 0.3, 12);
+  }
+  contactShadow(g, -2, -2, 31, 15, 0.18);
   const waterGeo = new THREE.PlaneGeometry(120, 50, 60, 26);
   waterGeo.rotateX(-Math.PI / 2);
-  const waterMat = new THREE.MeshPhysicalMaterial({
-    color: 0x7fb3ba,
-    roughness: 0.24,
-    metalness: 0.14,
-    clearcoat: 0.9,
-    clearcoatRoughness: 0.2,
-  });
+  const waterMat = materials.water.clone();
+  waterMat.color.setHex(0x6fa7b0);
+  waterMat.roughness = 0.22;
   const water = new THREE.Mesh(waterGeo, waterMat);
   water.userData.dynamic = true;
   water.position.set(42, -0.2, 58);

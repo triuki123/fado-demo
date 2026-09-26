@@ -3,7 +3,7 @@ import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.j
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 export const materials = {};
 for (const [key, color] of Object.entries({
-  white: 0xfdf6ea,
+  white: 0xf4f0e8,
   concrete: 0xd3cfc4,
   orange: 0xf36c21,
   dark: 0x26313a,
@@ -12,7 +12,7 @@ for (const [key, color] of Object.entries({
   blue: 0x4f7180,
   green: 0x39765f,
   leaf: 0x79a77b,
-  grass: 0xeec389,
+  grass: 0x91aa83,
   metal: 0xa4b0b4,
   wood: 0x9b6c47,
   water: 0x8fbfc4,
@@ -39,11 +39,11 @@ for (const [key, color] of Object.entries({
   });
 }
 materials.window = new THREE.MeshStandardMaterial({
-  color: 0xffffff,
-  roughness: 0.24,
-  metalness: 0.3,
+  color: 0x9eb8bd,
+  roughness: 0.3,
+  metalness: 0.16,
   emissive: 0xffd69a,
-  emissiveIntensity: 0.055,
+  emissiveIntensity: 0.035,
 });
 materials.roof = new THREE.MeshStandardMaterial({
   color: 0x707b80,
@@ -56,7 +56,7 @@ materials.tire = new THREE.MeshStandardMaterial({
 materials.light = new THREE.MeshStandardMaterial({
   color: 0xffe5ac,
   emissive: 0xffda99,
-  emissiveIntensity: 2.4,
+  emissiveIntensity: 1.65,
 });
 const geometries = new Map();
 let bevelSegments = 2;
@@ -202,7 +202,13 @@ export function sign(parent, text, x, y, z, width = 8, color = "#f36c21") {
   parent.add(m);
   return m;
 }
-export function instances(parent, geometry, material, transforms) {
+export function instances(
+  parent,
+  geometry,
+  material,
+  transforms,
+  { castShadow = true, receiveShadow = true } = {},
+) {
   const mesh = new THREE.InstancedMesh(
     geometry,
     typeof material === "string" ? materials[material] : material,
@@ -216,8 +222,8 @@ export function instances(parent, geometry, material, transforms) {
     o.updateMatrix();
     mesh.setMatrixAt(i, o.matrix);
   });
-  mesh.castShadow = true;
-  mesh.receiveShadow = true;
+  mesh.castShadow = castShadow;
+  mesh.receiveShadow = receiveShadow;
   parent.add(mesh);
   return mesh;
 }

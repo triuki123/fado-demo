@@ -20,8 +20,12 @@ function runwayMarkings(group) {
   }
   for (const z of [RUNWAY_Z - 2.35, RUNWAY_Z + 2.35])
     marks.push({ p: [0, 0.315, z], s: [45, 0.018, 0.07] });
-  instances(group, new THREE.BoxGeometry(1, 1, 1), "white", marks);
-  instances(group, new THREE.BoxGeometry(1, 1, 1), "light", lights);
+  instances(group, new THREE.BoxGeometry(1, 1, 1), "white", marks, {
+    castShadow: false,
+  });
+  instances(group, new THREE.BoxGeometry(1, 1, 1), "light", lights, {
+    castShadow: false,
+  });
 }
 
 function controlTower(group) {

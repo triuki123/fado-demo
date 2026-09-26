@@ -24,16 +24,7 @@ export function createWorld(scene, quality) {
   const world = new THREE.Group();
   scene.add(world);
   const seaGeo = new THREE.PlaneGeometry(260, 220, 48, 40);
-  const water = new THREE.Mesh(
-    seaGeo,
-    new THREE.MeshPhysicalMaterial({
-      color: 0x74aeb6,
-      roughness: 0.12,
-      metalness: 0.1,
-      clearcoat: 0.9,
-      clearcoatRoughness: 0.12,
-    }),
-  );
+  const water = new THREE.Mesh(seaGeo, materials.water);
   water.rotation.x = -Math.PI / 2;
   water.position.y = -1.55;
   water.receiveShadow = true;
@@ -174,6 +165,26 @@ export function createWorld(scene, quality) {
         0.33 + (i % 5) * 0.015,
         0.32,
         0.3 + (i % 4) * 0.03,
+      ),
+    ),
+  );
+  const crownLayers = crowns.map((tree, i) => ({
+    p: [
+      tree.p[0] + (i % 2 ? 0.32 : -0.26),
+      tree.p[1] + tree.s[1] * 0.28,
+      tree.p[2] + (i % 3 ? 0.12 : -0.24),
+    ],
+    s: [tree.s[0] * 0.68, tree.s[1] * 0.58, tree.s[2] * 0.7],
+    r: (i * 1.73) % Math.PI,
+  }));
+  const upperTrees = instances(world, crownGeo, "leaf", crownLayers);
+  crownLayers.forEach((_, i) =>
+    upperTrees.setColorAt(
+      i,
+      new THREE.Color().setHSL(
+        0.35 + (i % 4) * 0.012,
+        0.34,
+        0.4 + (i % 3) * 0.025,
       ),
     ),
   );
@@ -335,6 +346,7 @@ export function createWorld(scene, quality) {
         0.12 + THREE.MathUtils.smoothstep(progress, 0.85, 1) * 0.7;
       particles.rotation.y = time * 0.002;
       trees.rotation.z = Math.sin(time * 0.6) * 0.0006;
+      upperTrees.rotation.z = -Math.sin(time * 0.55) * 0.00045;
     },
   };
 }

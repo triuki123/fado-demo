@@ -33,6 +33,7 @@ export function facade(
     new THREE.BoxGeometry(1, 1, 1),
     materials.window,
     panes,
+    { castShadow: false },
   );
   panes.forEach((_, i) =>
     mesh.setColorAt(
@@ -77,6 +78,7 @@ export function facade(
     new THREE.BoxGeometry(1, 1, 1),
     materials.window,
     sidePanes,
+    { castShadow: false },
   );
   sidePanes.forEach((_, i) =>
     sides.setColorAt(i, new THREE.Color(i % 4 === 0 ? 0xffdfa5 : 0x66878b)),
@@ -147,18 +149,18 @@ export function bollards(parent, x, z, count = 5, spacing = 2) {
   }
 }
 
-export function rail(parent, a, b) {
-  beam(parent, [a[0], 1, a[1]], [b[0], 1, b[1]], 0.045, "metal");
+export function rail(parent, a, b, height = 1, base = 0.3) {
+  beam(parent, [a[0], height, a[1]], [b[0], height, b[1]], 0.045, "metal");
   const distance = Math.hypot(b[0] - a[0], b[1] - a[1]);
   for (let i = 0; i <= Math.ceil(distance); i++) {
     const t = i / Math.ceil(distance);
     cylinder(
       parent,
       THREE.MathUtils.lerp(a[0], b[0], t),
-      0.3,
+      base,
       THREE.MathUtils.lerp(a[1], b[1], t),
       0.035,
-      0.75,
+      height - base,
       "metal",
     );
   }

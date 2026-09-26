@@ -24,7 +24,8 @@ export const roadCurve = new THREE.CatmullRomCurve3(
 );
 
 export function ribbon(parent, curve, width, material, yOffset = 0) {
-  const vertices = [], indices = [];
+  const vertices = [],
+    indices = [];
   const segments = 180;
   for (let i = 0; i <= segments; i++) {
     const t = i / segments;
@@ -43,7 +44,10 @@ export function ribbon(parent, curve, width, material, yOffset = 0) {
     }
   }
   const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
+  geometry.setAttribute(
+    "position",
+    new THREE.Float32BufferAttribute(vertices, 3),
+  );
   geometry.setIndex(indices);
   geometry.computeVertexNormals();
   const mesh = new THREE.Mesh(geometry, materials[material]);
@@ -63,13 +67,17 @@ export function createRoads(world) {
   ribbon(world, roadCurve, 5.05, "dark", -0.055);
   ribbon(world, roadCurve, 4.55, "asphalt");
 
-  const dashes = [], curbs = [], poles = [], lights = [];
+  const dashes = [],
+    curbs = [],
+    poles = [],
+    lights = [];
   for (let i = 0; i < 76; i++) {
     const t = i / 76;
     const p = roadCurve.getPointAt(t);
     const v = roadCurve.getTangentAt(t);
     const r = Math.atan2(v.x, v.z);
-    if (i % 2 === 0) dashes.push({ p: [p.x, p.y + 0.025, p.z], s: [0.14, 0.025, 1.05], r });
+    if (i % 2 === 0)
+      dashes.push({ p: [p.x, p.y + 0.025, p.z], s: [0.14, 0.025, 1.05], r });
     for (const side of [-1, 1])
       curbs.push({
         p: [p.x - v.z * 2.37 * side, p.y + 0.07, p.z + v.x * 2.37 * side],
@@ -87,14 +95,30 @@ export function createRoads(world) {
     }
   }
   const cube = new THREE.BoxGeometry(1, 1, 1);
-  instances(world, cube, "white", dashes);
+  instances(world, cube, "white", dashes, { castShadow: false });
   instances(world, cube, "concrete", curbs);
   instances(world, cube, "dark", poles);
-  instances(world, cube, "light", lights);
+  instances(world, cube, "light", lights, { castShadow: false });
 
-  access(world, [[-50, 0.24, 14], [-46, 0.24, 14], [-44, 0.24, 14]]);
-  access(world, [[-50, 0.24, -18], [-46, 0.24, -18], [-43, 0.24, -18]]);
-  access(world, [[10, 0.24, -55], [10, 0.24, -57], [10, 0.24, -58.5]]);
-  access(world, [[54, 0.24, 34], [56, 0.24, 34], [58, 0.24, 34]]);
+  access(world, [
+    [-50, 0.24, 14],
+    [-46, 0.24, 14],
+    [-44, 0.24, 14],
+  ]);
+  access(world, [
+    [-50, 0.24, -18],
+    [-46, 0.24, -18],
+    [-43, 0.24, -18],
+  ]);
+  access(world, [
+    [10, 0.24, -55],
+    [10, 0.24, -57],
+    [10, 0.24, -58.5],
+  ]);
+  access(world, [
+    [54, 0.24, 34],
+    [56, 0.24, 34],
+    [58, 0.24, 34],
+  ]);
   return roadCurve;
 }

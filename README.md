@@ -13,6 +13,7 @@ Pinned CDN dependencies: Three.js 0.169.0, GSAP/ScrollTrigger 3.12.5, Lenis 1.1.
 ## Source map
 
 `src/core/Scene.js`: renderer, lighting, fog, shadows, restrained bloom and output pass.
+`src/core/SurfaceTextures.js`: deterministic PBR surface detail, roughness response and device-scaled texture resolution.
 `src/world/`: shared geometry/material helpers, architecture, spline roads, port/water, airport and world assembly.
 `src/objects/Vehicles.js`: trucks, vans, forklift, aircraft, curve-following traffic.
 `src/animation/CameraPath.js`: editable camera position/target/timing configuration with frame-independent damping.
@@ -20,6 +21,8 @@ Pinned CDN dependencies: Three.js 0.169.0, GSAP/ScrollTrigger 3.12.5, Lenis 1.1.
 `src/ui/`: chapter transitions, navigation and raycast interactions.
 
 Run `npm run check` for JS syntax and local import validation. Check rendering and console in a WebGL2 browser. High quality targets desktop 60fps; actual frame rate depends on GPU and display resolution. Contact opens a dialog linking to the official FADO website; no invented contact information or backend submission.
+
+The scene uses a local 1K CC0 Poly Haven HDRI for outdoor image-based lighting, with an internal fallback if the file cannot load. High quality enables subtle SSAO and SMAA; Medium omits AO; Low renders directly without post-processing. These switches preserve the same world coordinates and storytelling.
 
 ## Browser verification
 
