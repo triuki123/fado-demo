@@ -14,6 +14,20 @@ const truckReady = loader
     });
     return gltf.scene;
   });
+const ecosystemReady = loader
+  .loadAsync("./assets/models/fado_ecosystem.glb")
+  .then((gltf) => {
+    gltf.scene.traverse((object) => {
+      if (!object.isMesh) return;
+      object.castShadow = ![
+        "Curtain wall glass",
+        "Reflecting water",
+        "Landscape",
+      ].includes(object.material?.name);
+      object.receiveShadow = true;
+    });
+    return gltf.scene;
+  });
 
 export function replaceWithTruckModel(anchor) {
   const task = truckReady.then((source) => {
@@ -27,4 +41,10 @@ export function replaceWithTruckModel(anchor) {
 
 export function waitForModels() {
   return Promise.all(pending);
+}
+
+export function addEcosystemModel(parent) {
+  const task = ecosystemReady.then((model) => parent.add(model));
+  pending.push(task);
+  return task;
 }

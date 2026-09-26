@@ -31,6 +31,11 @@ Blender source files and exported GLB models live in `assets/models`. Run
 loads the GLB into the existing logical vehicle anchors, so traffic paths,
 spacing and animation remain unchanged.
 
+The same build now exports the static FADO ecosystem campus: six distinct
+supporting facilities, three shared landscape zones, a central plaza and
+pedestrian connections. Major district coordinates, roads and camera paths are
+unchanged.
+
 ## Browser verification
 
 For the optional automated checks, run `npm install`, keep the local server running, then run `npm run test:browser`. This uses an installed Chrome in headless mode. Screenshots and the result report are written to `artifacts/` (gitignored).

@@ -15,15 +15,17 @@ import {
   createWarehouse,
   createHub,
 } from "./Buildings.js";
-import { createRoads, roadCurve } from "./Road.js";
+import { createRoads, roadCurve, ribbon } from "./Road.js";
 import { createPort } from "./Port.js";
 import { createAirport } from "./Airport.js";
 import { naturalTree } from "./Details.js";
+import { addEcosystemModel } from "../core/ModelAssets.js";
 import { createTraffic, forklift } from "../objects/Vehicles.js";
 export function createWorld(scene, quality) {
   setGeometryQuality(quality.name);
   const world = new THREE.Group();
   scene.add(world);
+  addEcosystemModel(world);
   const seg = quality.name === "high" ? [36, 28] : [24, 18];
   const seaGeo = new THREE.PlaneGeometry(260, 220, seg[0], seg[1]);
   const water = new THREE.Mesh(seaGeo, materials.water);
@@ -70,6 +72,35 @@ export function createWorld(scene, quality) {
     box(world, x, -0.22, z, width, 0.28, depth, material, 1.1);
   }
   createRoads(world);
+  for (const bridgePoints of [
+    [[-3, 0.4, 31], [-3, 0.75, 28], [-3, 0.4, 25]],
+    [[23, 0.4, 10], [21.5, 0.72, 11], [20, 0.4, 12]],
+    [[-31, 0.4, -33], [-30, 0.75, -31], [-28, 0.4, -29]],
+    [[-12, 0.4, 0], [-14.5, 0.68, 1], [-17, 0.4, 3]],
+  ]) {
+    const curve = new THREE.CatmullRomCurve3(
+      bridgePoints.map((point) => new THREE.Vector3(...point)),
+      false,
+      "centripetal",
+    );
+    ribbon(world, curve, 1.65, "concrete", 0.05);
+    for (const side of [-1, 1]) {
+      const railCurve = new THREE.CatmullRomCurve3(
+        bridgePoints.map(
+          ([x, y, z], i) =>
+            new THREE.Vector3(x + side * 0.77, y + 0.72, z),
+        ),
+        false,
+        "centripetal",
+      );
+      const rail = new THREE.Mesh(
+        new THREE.TubeGeometry(railCurve, 18, 0.035, 6, false),
+        materials.metal,
+      );
+      rail.castShadow = true;
+      world.add(rail);
+    }
+  }
   for (const [x, z, width, depth] of [
     [-10, 14, 14, 5],
     [-7, -18, 7, 5],
@@ -130,6 +161,18 @@ export function createWorld(scene, quality) {
     [22, -57, 2.8],
     [46, -57, 3.1],
     [42, -36, 2.4],
+    [-13, 35, 2.2],
+    [-2, 42, 2.1],
+    [10, 35, 2.2],
+    [25, 2, 2.3],
+    [27, 14, 2.1],
+    [43, 2, 2.2],
+    [44, 15, 2.4],
+    [-42, -36, 2.25],
+    [-34, -44, 2.1],
+    [-20, -36, 2.2],
+    [-8, -4, 1.9],
+    [-3, 3, 1.8],
   ];
   landscape.forEach(([x, z, h], index) => {
     const r = Math.abs(Math.sin(x * 12.9898 + z * 78.233) * 43758.5453) % 1;

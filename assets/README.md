@@ -10,3 +10,8 @@ License: CC0. The HDRI is used only for image-based lighting and material reflec
 `scripts/blender/create_fado_truck.py`. The source `.blend` is retained so the
 model can be refined in Blender and exported again without changing Three.js
 anchors or vehicle animation code.
+
+`models/fado_ecosystem.glb` and its editable
+`models/fado_ecosystem_source.blend` contain the six supporting facilities,
+three landscaped campus zones and central plaza. The runtime GLB is merged by
+material to keep the expanded aerial scene efficient.

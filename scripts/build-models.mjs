@@ -11,9 +11,11 @@ const candidates = [
 const blender = candidates.find(existsSync);
 if (!blender)
   throw new Error("Blender was not found. Set BLENDER_BIN to blender.exe.");
-const script = path.resolve("scripts/blender/create_fado_truck.py");
-const result = spawnSync(blender, ["--background", "--python", script], {
-  stdio: "inherit",
-});
-if (result.error) throw result.error;
-process.exitCode = result.status ?? 1;
+for (const filename of ["create_fado_truck.py", "create_fado_ecosystem.py"]) {
+  const script = path.resolve("scripts/blender", filename);
+  const result = spawnSync(blender, ["--background", "--python", script], {
+    stdio: "inherit",
+  });
+  if (result.error) throw result.error;
+  if (result.status) process.exit(result.status);
+}
