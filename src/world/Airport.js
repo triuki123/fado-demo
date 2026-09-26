@@ -9,8 +9,10 @@ const RUNWAY_Z = -4;
 function runwayMarkings(group) {
   const marks = [],
     lights = [];
-  for (let x = -21; x <= 21; x += 4.5)
+  for (let x = -21; x <= 21; x += 4.5) {
+    if (x >= -2 && x <= 14) continue;
     marks.push({ p: [x, 0.315, RUNWAY_Z], s: [2.25, 0.025, 0.16] });
+  }
   for (let x = -22; x <= 22; x += 2.2)
     for (const z of [RUNWAY_Z - 2.7, RUNWAY_Z + 2.7])
       lights.push({ p: [x, 0.38, z], s: [0.11, 0.11, 0.11] });
@@ -26,6 +28,97 @@ function runwayMarkings(group) {
   instances(group, new THREE.BoxGeometry(1, 1, 1), "light", lights, {
     castShadow: false,
   });
+}
+
+function runwayBranding(group) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 2048;
+  canvas.height = 512;
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, 2048, 512);
+
+  ctx.textBaseline = "middle";
+  ctx.textAlign = "left";
+
+  const textFado = "FADO ";
+  const textSolutions = "Solutions";
+  ctx.font = "900 180px 'Plus Jakarta Sans', Montserrat, Arial, sans-serif";
+  const wFado = ctx.measureText(textFado).width;
+  const wSolutions = ctx.measureText(textSolutions).width;
+  const totalW = wFado + wSolutions;
+  const startX = (2048 - totalW) / 2;
+  const textY = 230;
+
+  // Dark outline for maximum contrast on tarmac
+  ctx.lineJoin = "round";
+  ctx.miterLimit = 2;
+  ctx.strokeStyle = "rgba(20, 25, 30, 0.85)";
+  ctx.lineWidth = 14;
+  ctx.strokeText(textFado, startX, textY);
+  ctx.strokeText(textSolutions, startX + wFado, textY);
+
+  // FADO in vibrant orange
+  ctx.fillStyle = "#f36c21";
+  ctx.fillText(textFado, startX, textY);
+
+  // Solutions in pure bright white
+  ctx.fillStyle = "#ffffff";
+  ctx.fillText(textSolutions, startX + wFado, textY);
+
+  // Runway markings accent underline bars
+  ctx.fillStyle = "#f36c21";
+  ctx.fillRect(startX, 350, wFado - 24, 20);
+
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(startX + wFado, 350, wSolutions, 20);
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.anisotropy = 8;
+  texture.needsUpdate = true;
+
+  const width = 15.5;
+  const depth = 3.6;
+  const cx = 6.0;
+  const cz = RUNWAY_Z;
+  const y = 0.355; // Tarmac asphalt top is at 0.335
+
+  const positions = new Float32Array([
+    cx - width / 2,
+    y,
+    cz - depth / 2,
+    cx + width / 2,
+    y,
+    cz - depth / 2,
+    cx + width / 2,
+    y,
+    cz + depth / 2,
+    cx - width / 2,
+    y,
+    cz + depth / 2,
+  ]);
+  const uvs = new Float32Array([1, 0, 0, 0, 0, 1, 1, 1]);
+  const indices = [0, 1, 2, 0, 2, 3];
+
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+  geometry.setAttribute("uv", new THREE.BufferAttribute(uvs, 2));
+  geometry.setIndex(indices);
+  geometry.computeVertexNormals();
+
+  const material = new THREE.MeshBasicMaterial({
+    map: texture,
+    transparent: true,
+    side: THREE.DoubleSide,
+    depthWrite: false,
+    polygonOffset: true,
+    polygonOffsetFactor: -3,
+    polygonOffsetUnits: -3,
+  });
+
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.userData.dynamic = true;
+  group.add(mesh);
 }
 
 function controlTower(group) {
@@ -57,6 +150,7 @@ export function createAirport(world) {
   box(g, -15, 0.285, -2, 3.6, 0.05, 4.2, "asphalt", 0.1);
   box(g, 13, 0.285, 3.0, 16, 0.05, 3.8, "concrete", 0.18);
   runwayMarkings(g);
+  runwayBranding(g);
 
   // Terminal stays behind the runway. Jet bridges connect facade to apron.
   box(g, 8, 0.34, 8, 25, 0.35, 8.5, "dark", 0.7);
