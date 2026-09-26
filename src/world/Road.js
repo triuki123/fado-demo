@@ -70,6 +70,7 @@ export function createRoads(world) {
   const dashes = [],
     curbs = [],
     poles = [],
+    arms = [],
     lights = [];
   for (let i = 0; i < 76; i++) {
     const t = i / 76;
@@ -89,16 +90,37 @@ export function createRoads(world) {
       for (const side of [-1, 1]) {
         const x = p.x + n.x * 3.05 * side;
         const z = p.z + n.z * 3.05 * side;
-        poles.push({ p: [x, 1.9, z], s: [0.09, 3.4, 0.09] });
-        lights.push({ p: [x, 3.65, z], s: [0.6, 0.1, 0.3], r });
+        poles.push({ p: [x, 1.9, z], s: [1, 1, 1] });
+        arms.push({
+          p: [x - n.x * side * 0.28, 3.62, z - n.z * side * 0.28],
+          s: [0.055, 0.055, 0.75],
+          r,
+        });
+        lights.push({
+          p: [x - n.x * side * 0.62, 3.58, z - n.z * side * 0.62],
+          s: [0.42, 0.13, 0.24],
+          r,
+        });
       }
     }
   }
   const cube = new THREE.BoxGeometry(1, 1, 1);
   instances(world, cube, "white", dashes, { castShadow: false });
   instances(world, cube, "concrete", curbs);
-  instances(world, cube, "dark", poles);
-  instances(world, cube, "light", lights, { castShadow: false });
+  instances(
+    world,
+    new THREE.CylinderGeometry(0.055, 0.12, 3.4, 10),
+    "dark",
+    poles,
+  );
+  instances(world, cube, "dark", arms);
+  instances(
+    world,
+    new THREE.CapsuleGeometry(0.17, 0.34, 4, 10),
+    "light",
+    lights,
+    { castShadow: false },
+  );
 
   access(world, [
     [-50, 0.24, 14],

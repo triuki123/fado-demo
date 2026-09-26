@@ -30,14 +30,27 @@ export function createPort(world) {
     ),
   );
   const ribs = [];
+  const containerFrames = [];
   cargo.forEach((t) => {
     for (let dx = -1.5; dx < 1.6; dx += 0.5)
       ribs.push({
         p: [t.p[0] + dx, t.p[1], t.p[2] + 1.065],
         s: [0.05, 1.15, 0.045],
       });
+    for (const side of [-1, 1]) {
+      containerFrames.push({
+        p: [t.p[0], t.p[1] + side * 0.58, t.p[2] + 1.08],
+        s: [3.56, 0.075, 0.07],
+      });
+      for (const x of [-1.72, 1.72])
+        containerFrames.push({
+          p: [t.p[0] + x, t.p[1], t.p[2] + 1.09],
+          s: [0.09, 1.25, 0.08],
+        });
+    }
   });
   instances(g, new THREE.BoxGeometry(1, 1, 1), "metal", ribs);
+  instances(g, new THREE.BoxGeometry(1, 1, 1), "dark", containerFrames);
   const cranes = [];
   for (const x of [-8, 5]) {
     const crane = new THREE.Group();
@@ -59,6 +72,18 @@ export function createPort(world) {
     for (const a of [-1, 1])
       beam(trolley, [a, 12, 6], [a, 6, 6], 0.055, "dark");
     box(trolley, 0, 5.8, 6, 3, 0.3, 1.5, "orange");
+    box(crane, 1.35, 10.3, 1.2, 1.15, 1.65, 1.2, "glass", 0.12);
+    box(crane, 1.35, 11.92, 1.2, 1.35, 0.16, 1.4, "orange", 0.05);
+    for (const side of [-2, 2])
+      for (const z of [-0.55, 0.55]) {
+        const wheel = new THREE.Mesh(
+          new THREE.TorusGeometry(0.28, 0.1, 8, 16),
+          materials.tire,
+        );
+        wheel.rotation.y = Math.PI / 2;
+        wheel.position.set(side, 0.52, z - 1);
+        crane.add(wheel);
+      }
     cranes.push(trolley);
   }
   const ship = new THREE.Group();

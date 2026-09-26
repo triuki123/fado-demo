@@ -1,35 +1,70 @@
 import * as THREE from "three";
 import { box, cylinder, materials, mergeStatic } from "../world/primitives.js";
+
+function truckCab(color) {
+  const shape = new THREE.Shape();
+  shape.moveTo(-0.68, 0);
+  shape.lineTo(0.64, 0);
+  shape.lineTo(0.64, 0.36);
+  shape.quadraticCurveTo(0.62, 0.72, 0.42, 1.18);
+  shape.quadraticCurveTo(0.24, 1.52, -0.12, 1.58);
+  shape.lineTo(-0.62, 1.58);
+  shape.quadraticCurveTo(-0.75, 1.5, -0.78, 1.28);
+  shape.lineTo(-0.78, 0.25);
+  shape.closePath();
+  const geometry = new THREE.ExtrudeGeometry(shape, {
+    depth: 1.5,
+    bevelEnabled: true,
+    bevelSegments: 2,
+    bevelSize: 0.06,
+    bevelThickness: 0.055,
+  });
+  geometry.translate(0, 0, -0.75);
+  geometry.rotateY(Math.PI / 2);
+  const cab = new THREE.Mesh(geometry, materials[color]);
+  cab.castShadow = cab.receiveShadow = true;
+  return cab;
+}
+
+function vehicleWheel(parent, x, z) {
+  const tire = new THREE.Mesh(
+    new THREE.TorusGeometry(0.3, 0.105, 10, 22),
+    materials.tire,
+  );
+  tire.rotation.y = Math.PI / 2;
+  tire.position.set(x, 0.43, z);
+  tire.castShadow = true;
+  parent.add(tire);
+  const rim = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.16, 0.16, 0.24, 18),
+    materials.metal,
+  );
+  rim.rotation.z = Math.PI / 2;
+  rim.position.copy(tire.position);
+  parent.add(rim);
+}
+
 export function truck(parent, kind = "truck", color = "orange") {
   const g = new THREE.Group();
   parent.add(g);
   const length = kind === "van" ? 2.1 : 3.5;
   box(g, 0, 0.45, 0, 1.6, 0.24, length + 1.22, "dark");
   box(g, 0, 0.74, -0.42, 1.65, 1.72, length, color, 0.16);
-  box(g, 0, 0.62, length / 2 + 0.52, 1.58, 1.62, 1.22, "white", 0.24);
-  box(g, 0, 1.48, length / 2 + 1.14, 1.3, 0.54, 0.04, "glass", 0.02);
+  const cab = truckCab("white");
+  cab.position.set(0, 0.67, length / 2 + 0.54);
+  g.add(cab);
+  const windshield = box(g, 0, 1.5, length / 2 + 1.26, 1.16, 0.48, 0.045, "glass", 0.08);
+  windshield.rotation.x = -0.14;
   box(g, -0.81, 1.27, length / 2 + 0.56, 0.035, 0.45, 0.72, "glass", 0.01);
   box(g, 0.81, 1.27, length / 2 + 0.56, 0.035, 0.45, 0.72, "glass", 0.01);
   box(g, -0.93, 1.05, length / 2 + 0.78, 0.16, 0.12, 0.2, "dark", 0.03);
   box(g, 0.93, 1.05, length / 2 + 0.78, 0.16, 0.12, 0.2, "dark", 0.03);
   box(g, 0, 0.67, length / 2 + 1.18, 1.5, 0.18, 0.12, "dark", 0.03);
-  for (const x of [-0.8, 0.8])
-    for (const z of [-length / 2 + 0.35, length / 2 + 0.5]) {
-      const wheel = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.38, 0.38, 0.22, 18),
-        materials.tire,
-      );
-      wheel.rotation.z = Math.PI / 2;
-      wheel.position.set(x, 0.42, z);
-      g.add(wheel);
-      const hub = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.16, 0.16, 0.235, 16),
-        materials.metal,
-      );
-      hub.rotation.z = Math.PI / 2;
-      hub.position.copy(wheel.position);
-      g.add(hub);
-    }
+  for (const x of [-0.82, 0.82])
+    for (const z of [-length / 2 + 0.35, length / 2 + 0.5])
+      vehicleWheel(g, x, z);
+  for (const x of [-0.84, 0.84])
+    box(g, x, 0.75, length / 2 + 0.55, 0.05, 0.5, 0.72, "dark", 0.14);
   for (const x of [-0.5, 0.5])
     box(g, x, 0.85, length / 2 + 1.13, 0.23, 0.16, 0.05, "light", 0.025);
   mergeStatic(g);

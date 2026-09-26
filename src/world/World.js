@@ -18,6 +18,7 @@ import {
 import { createRoads, roadCurve } from "./Road.js";
 import { createPort } from "./Port.js";
 import { createAirport } from "./Airport.js";
+import { naturalTree } from "./Details.js";
 import { createTraffic, forklift } from "../objects/Vehicles.js";
 export function createWorld(scene, quality) {
   setGeometryQuality(quality.name);
@@ -63,7 +64,8 @@ export function createWorld(scene, quality) {
     [20, -46, 56, 26, 1.65, "concrete"],
   ];
   for (const [x, z, width, depth, height, material] of platforms) {
-    box(world, x, -height, z, width + 2.5, height, depth + 2.5, "dark", 1.1);
+    box(world, x, -height, z, width + 1.2, height, depth + 1.2, material, 1.35);
+    box(world, x, -0.38, z, width + 1.65, 0.22, depth + 1.65, "concrete", 0.65);
     box(world, x, -0.22, z, width, 0.28, depth, material, 1.1);
   }
   createRoads(world);
@@ -99,8 +101,6 @@ export function createWorld(scene, quality) {
   );
   // Repeated landscape and architecture are drawn in batches.
   const random = seeded(),
-    trunks = [],
-    crowns = [],
     shrubs = [];
   const landscape = [
     [-41, 4, 3.2],
@@ -130,65 +130,13 @@ export function createWorld(scene, quality) {
     [46, -57, 3.1],
     [42, -36, 2.4],
   ];
-  for (const [x, z, h] of landscape) {
+  landscape.forEach(([x, z, h], index) => {
     const r = Math.abs(Math.sin(x * 12.9898 + z * 78.233) * 43758.5453) % 1;
-    const spread = (h > 3 ? 1.42 : 1.16) * (0.85 + r * 0.35);
-    trunks.push({ p: [x, h / 2, z], s: [0.16, h, 0.16] });
-    crowns.push({
-      p: [x + (r - 0.5) * 0.4, h + 0.85, z],
-      s: [spread, h * (0.5 + r * 0.14), spread * (0.85 + (1 - r) * 0.3)],
-    });
+    naturalTree(world, x, z, h * (0.9 + r * 0.18), index);
     shrubs.push({ p: [x + 0.68, 0.38, z + 0.68], s: [0.72, 0.38, 0.72] });
-  }
-  // Jittered canopy geometry reads organic instead of perfect spheres.
-  const crownGeo = new THREE.IcosahedronGeometry(1, 1);
-  {
-    const pos = crownGeo.attributes.position;
-    for (let i = 0; i < pos.count; i++) {
-      const jitter = 0.78 + Math.abs((Math.sin(i * 91.17) * 15731.7) % 1) * 0.5;
-      pos.setXYZ(
-        i,
-        pos.getX(i) * jitter,
-        pos.getY(i) *
-          (0.72 + Math.abs((Math.sin(i * 47.3) * 7919.3) % 1) * 0.4),
-        pos.getZ(i) * jitter,
-      );
-    }
-    crownGeo.computeVertexNormals();
-  }
-  instances(world, new THREE.CylinderGeometry(0.7, 1, 1, 6), "wood", trunks);
-  const trees = instances(world, crownGeo, "green", crowns);
-  crowns.forEach((_, i) =>
-    trees.setColorAt(
-      i,
-      new THREE.Color().setHSL(
-        0.33 + (i % 5) * 0.015,
-        0.32,
-        0.3 + (i % 4) * 0.03,
-      ),
-    ),
-  );
-  const crownLayers = crowns.map((tree, i) => ({
-    p: [
-      tree.p[0] + (i % 2 ? 0.32 : -0.26),
-      tree.p[1] + tree.s[1] * 0.28,
-      tree.p[2] + (i % 3 ? 0.12 : -0.24),
-    ],
-    s: [tree.s[0] * 0.68, tree.s[1] * 0.58, tree.s[2] * 0.7],
-    r: (i * 1.73) % Math.PI,
-  }));
-  const upperTrees = instances(world, crownGeo, "leaf", crownLayers);
-  crownLayers.forEach((_, i) =>
-    upperTrees.setColorAt(
-      i,
-      new THREE.Color().setHSL(
-        0.35 + (i % 4) * 0.012,
-        0.34,
-        0.4 + (i % 3) * 0.025,
-      ),
-    ),
-  );
-  instances(world, crownGeo, "leaf", shrubs);
+  });
+  const shrubGeo = organicShrubGeometry();
+  instances(world, shrubGeo, "leaf", shrubs);
   // Low meadow tufts and flower dots along island edges, clear of roads and docks.
   const tufts = [],
     flowers = [];
@@ -209,7 +157,7 @@ export function createWorld(scene, quality) {
         flowers.push({ p: [x - 0.35, 0.3, z + 0.3], s: [0.14, 0.14, 0.14] });
     }
   }
-  instances(world, crownGeo, "leaf", tufts);
+  instances(world, shrubGeo, "leaf", tufts);
   instances(world, new THREE.IcosahedronGeometry(1, 0), "orange", flowers);
   // Crosswalk, parking spaces, benches, fence and small human silhouettes.
   const stripes = [];
@@ -345,8 +293,22 @@ export function createWorld(scene, quality) {
       routeMat.opacity =
         0.12 + THREE.MathUtils.smoothstep(progress, 0.85, 1) * 0.7;
       particles.rotation.y = time * 0.002;
-      trees.rotation.z = Math.sin(time * 0.6) * 0.0006;
-      upperTrees.rotation.z = -Math.sin(time * 0.55) * 0.00045;
     },
   };
+}
+
+function organicShrubGeometry() {
+  const geometry = new THREE.SphereGeometry(1, 12, 8);
+  const position = geometry.attributes.position;
+  for (let i = 0; i < position.count; i++) {
+    const scale = 0.82 + Math.abs(Math.sin(i * 12.37)) * 0.28;
+    position.setXYZ(
+      i,
+      position.getX(i) * scale,
+      position.getY(i) * (0.65 + scale * 0.25),
+      position.getZ(i) * scale,
+    );
+  }
+  geometry.computeVertexNormals();
+  return geometry;
 }

@@ -6,6 +6,8 @@ import {
   contactShadow,
   bollards,
   rail,
+  architecturalVolume,
+  gabledRoof,
 } from "./Details.js";
 export function district(world, x, z, name, progress, url = null) {
   const g = new THREE.Group();
@@ -17,12 +19,15 @@ export function district(world, x, z, name, progress, url = null) {
 export function createHeadquarters(world) {
   const g = district(world, -30, 14, "FADO Group", 0.2, "https://ecosys.fadoai.com");
   box(g, 0, 0, 0, 15, 0.35, 12, "concrete", 0.6);
-  box(g, 0, 0.35, 0, 10, 13, 7, "glass", 0.5);
-  box(g, -4, 0.35, -1, 2, 14, 7, "white", 0.4);
-  box(g, 4, 0.35, -1, 2, 14, 7, "white", 0.4);
+  architecturalVolume(g, 0, 0.35, 0, 10, 13, 7, "glass", 0.75);
+  architecturalVolume(g, -4, 0.35, -1, 2, 14, 7, "white", 0.38);
+  architecturalVolume(g, 4, 0.35, -1, 2, 14, 7, "white", 0.38);
   for (let y = 1; y <= 13; y += 2) box(g, 0, y, 0, 10.5, 0.27, 7.5, "white");
   box(g, 0, 13.5, 0, 11, 0.5, 8, "white", 0.3);
   box(g, 0, 13.9, 0, 7, 0.7, 4, "grass", 0.2);
+  for (const x of [-5.15, 5.15])
+    for (let y = 1.4; y < 13; y += 2)
+      box(g, x, y, 0, 0.16, 1.3, 7.25, "metal", 0.035);
   const windows = [];
   for (let x = -3; x <= 3; x += 1.5)
     windows.push({ p: [x, 7, 3.55], s: [0.1, 12, 0.1] });
@@ -45,7 +50,7 @@ export function createHeadquarters(world) {
 export function createCommerce(world) {
   const g = district(world, 8, -18, "FADO China", 0.32, "https://cfado.com");
   box(g, 0, 0, 0, 17, 0.3, 12, "concrete", 0.8);
-  box(g, 0, 0.3, 0, 13, 5, 8, "white", 0.7);
+  architecturalVolume(g, 0, 0.3, 0, 13, 5, 8, "white", 0.7);
   box(g, 0, 0.7, 4.02, 11, 3.6, 0.12, "glass");
   facade(g, {
     width: 10.8,
@@ -55,7 +60,10 @@ export function createCommerce(world) {
     floors: 2,
     columns: 7,
   });
-  box(g, 0, 4.4, 4.6, 14, 0.35, 2, "orange", 0.15);
+  architecturalVolume(g, 0, 4.4, 4.6, 14, 0.35, 2, "orange", 0.34);
+  for (let x = -6; x <= 6; x += 2)
+    cylinder(g, x, 0.3, 5.05, 0.075, 4.2, "metal", 0.055, 12);
+  box(g, 0, 4.77, 5.43, 13.2, 0.11, 0.12, "dark", 0.025);
   box(g, -3, 5.2, -0.5, 6, 2, 5, "glass", 0.35);
   box(g, -3, 7.1, -0.5, 6.5, 0.3, 5.5, "white");
   sign(g, "FADO China", 1, 5.6, 4.25, 5.5);
@@ -69,9 +77,12 @@ export function createCommerce(world) {
 export function createWarehouse(world) {
   const g = district(world, -26, -18, "FADO Agri", 0.48, "https://fadoagri.com");
   box(g, 0, 0, 0, 22, 0.3, 18, "concrete", 0.5);
-  box(g, 0, 0.3, -1, 19, 5.2, 12, "white", 0.25);
-  const roof = box(g, 0, 5.5, -1, 20, 0.4, 13, "metal", 0.15);
-  roof.rotation.z = 0.035;
+  architecturalVolume(g, 0, 0.3, -1, 19, 5.2, 12, "white", 0.3);
+  gabledRoof(g, 0, 5.52, -1, 20, 13, 1.15);
+  for (let x = -8; x <= 8; x += 2)
+    box(g, x, 1, 5.12, 0.055, 4.35, 0.1, "metal", 0.012);
+  box(g, -7.2, 0.4, -7.1, 4.2, 3.2, 1.5, "glass", 0.18);
+  box(g, -7.2, 3.35, -7.1, 4.8, 0.22, 2.2, "orange", 0.06);
   box(g, 0, 4.2, 5.08, 19, 0.5, 0.2, "orange");
   sign(g, "FADO Agri", 0, 4.9, 5.25, 5.5);
   for (let x = -7.5; x <= 7.5; x += 3.75) {
@@ -99,7 +110,7 @@ export function createWarehouse(world) {
       0.65,
       "wood",
     );
-  roofDetails(g, -2.8, 6, -1.5, 9.5, 7.5);
+  roofDetails(g, -2.8, 6.25, -1.5, 9.5, 7.5);
   for (const x of [-9, 9]) {
     cylinder(g, x, 1, -4.5, 0.08, 4.1, "metal", 0.08, 8);
     box(g, x, 4.85, -4.5, 0.55, 0.32, 0.55, "metal", 0.05);
@@ -111,7 +122,7 @@ export function createWarehouse(world) {
 export function createHub(world) {
   const g = district(world, 8, 14, "FADO.VN", 0.57, "https://fado.vn");
   box(g, 0, 0, 0, 15, 0.3, 9, "concrete", 0.5);
-  box(g, 0, 0.3, -1, 12, 4, 6, "white", 0.45);
+  architecturalVolume(g, 0, 0.3, -1, 12, 4, 6, "white", 0.55);
   box(g, 0, 1, 2.05, 9, 2, 0.12, "glass");
   facade(g, {
     width: 8.8,
@@ -121,7 +132,10 @@ export function createHub(world) {
     floors: 1,
     columns: 6,
   });
-  box(g, 0, 3.5, 2.8, 13, 0.25, 2.5, "orange");
+  architecturalVolume(g, 0, 3.5, 2.8, 13, 0.25, 2.5, "orange", 0.38);
+  for (let x = -5; x <= 5; x += 2)
+    cylinder(g, x, 0.3, 3.5, 0.07, 3.25, "metal", 0.05, 12);
+  box(g, 0, 3.78, 3.78, 12.2, 0.1, 0.1, "dark", 0.02);
   sign(g, "FADO.VN", 0, 4.7, 2.3, 5.5);
   for (const x of [-5, 5]) cylinder(g, x, 0.3, 3.6, 0.1, 3.2);
   roofDetails(g, 0, 4.42, -1, 7.5, 4.4);
