@@ -10,7 +10,7 @@ import {
 import { district } from "./Buildings.js";
 import { rail, contactShadow } from "./Details.js";
 export function createPort(world) {
-  const g = district(world, 42, 34, "FADO Harbor", 0.66);
+  const g = district(world, 42, 34, "ProShip Logistics", 0.66, "https://proship.vn");
   box(g, -2, 0, -2, 29, 0.6, 13, "concrete", 0.4);
   const cargo = [];
   for (let x = -13; x < 6; x += 4)
@@ -100,7 +100,7 @@ export function createPort(world) {
   for (let x = -5; x < 10; x += 4)
     for (const z of [-1.4, 1.4])
       box(ship, x, 2, z, 3.7, 1.5, 2.2, x + z > 3 ? "blue" : "orange");
-  sign(ship, "FADO", 1, 0.9, 3.42, 4.5);
+sign(ship, "ProShip Logistics", 1, 0.9, 3.42, 8);
   for (let x = -14; x <= 10; x += 4) {
     cylinder(g, x, 0.62, 4.1, 0.22, 0.42, "dark", 0.26, 12);
     cylinder(g, x, 1.04, 4.1, 0.3, 0.12, "dark", 0.3, 12);

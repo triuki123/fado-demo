@@ -60,10 +60,17 @@ export function createInteraction(camera, objects, scroll) {
     const chapter = chapters.findLast((c) => c.at <= clicked.userData.progress);
     document.querySelector("#info-description").textContent =
       chapter.description;
+    document.querySelector("#info-explore").innerHTML = clicked.userData.url
+      ? "VISIT WEBSITE <span>↗</span>"
+      : "EXPLORE THIS DESTINATION <span>↗</span>";
     document.querySelector("#info").showModal();
   });
   document.querySelector("#info-explore").onclick = () => {
     document.querySelector("#info").close();
+    if (clicked.userData.url) {
+      window.open(clicked.userData.url, "_blank", "noopener,noreferrer");
+      return;
+    }
     scroll.go(clicked.userData.progress);
   };
   return () => {

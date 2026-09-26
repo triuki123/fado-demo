@@ -7,15 +7,15 @@ import {
   bollards,
   rail,
 } from "./Details.js";
-export function district(world, x, z, name, progress) {
+export function district(world, x, z, name, progress, url = null) {
   const g = new THREE.Group();
   g.position.set(x, 0.25, z);
-  g.userData = { name, progress, interactive: true };
+  g.userData = { name, progress, url, interactive: true };
   world.add(g);
   return g;
 }
 export function createHeadquarters(world) {
-  const g = district(world, -30, 14, "FADO Building", 0.2);
+  const g = district(world, -30, 14, "FADO Group", 0.2, "https://ecosys.fadoai.com");
   box(g, 0, 0, 0, 15, 0.35, 12, "concrete", 0.6);
   box(g, 0, 0.35, 0, 10, 13, 7, "glass", 0.5);
   box(g, -4, 0.35, -1, 2, 14, 7, "white", 0.4);
@@ -32,7 +32,7 @@ export function createHeadquarters(world) {
   box(g, 0, 0.56, 4.92, 1.82, 2.2, 0.08, "glass", 0.025);
   box(g, 0, 3.5, 4.5, 7, 0.25, 3, "orange");
   for (const x of [-3, 3]) cylinder(g, x, 0.35, 5.3, 0.09, 3.2);
-  sign(g, "FADO Building", 0, 11.5, 3.82, 7.5);
+  sign(g, "FADO Group", 0, 11.5, 3.82, 7);
   for (const x of [-5, 5]) {
     box(g, x, 0.5, 5, 1.8, 0.6, 1.5, "white");
     cylinder(g, x, 1.1, 5, 0.7, 0.8, "green", 0.6);
@@ -43,7 +43,7 @@ export function createHeadquarters(world) {
   return g;
 }
 export function createCommerce(world) {
-  const g = district(world, 8, -18, "FADO Operations", 0.32);
+  const g = district(world, 8, -18, "FADO China", 0.32, "https://cfado.com");
   box(g, 0, 0, 0, 17, 0.3, 12, "concrete", 0.8);
   box(g, 0, 0.3, 0, 13, 5, 8, "white", 0.7);
   box(g, 0, 0.7, 4.02, 11, 3.6, 0.12, "glass");
@@ -58,7 +58,7 @@ export function createCommerce(world) {
   box(g, 0, 4.4, 4.6, 14, 0.35, 2, "orange", 0.15);
   box(g, -3, 5.2, -0.5, 6, 2, 5, "glass", 0.35);
   box(g, -3, 7.1, -0.5, 6.5, 0.3, 5.5, "white");
-  sign(g, "FADO", 1, 5.6, 4.25, 4.5);
+  sign(g, "FADO China", 1, 5.6, 4.25, 5.5);
   for (let x = -5; x <= 5; x += 2.5) cylinder(g, x, 0.3, 5, 0.09, 4.1);
   box(g, 5, 5.4, -1, 2, 0.7, 2, "metal");
   roofDetails(g, 2.2, 5.42, -1.4, 6.6, 4.2);
@@ -67,7 +67,7 @@ export function createCommerce(world) {
   return g;
 }
 export function createWarehouse(world) {
-  const g = district(world, -26, -18, "FADO Agri", 0.48);
+  const g = district(world, -26, -18, "FADO Agri", 0.48, "https://fadoagri.com");
   box(g, 0, 0, 0, 22, 0.3, 18, "concrete", 0.5);
   box(g, 0, 0.3, -1, 19, 5.2, 12, "white", 0.25);
   const roof = box(g, 0, 5.5, -1, 20, 0.4, 13, "metal", 0.15);
@@ -109,7 +109,7 @@ export function createWarehouse(world) {
   return g;
 }
 export function createHub(world) {
-  const g = district(world, 8, 14, "FADO Hub", 0.57);
+  const g = district(world, 8, 14, "FADO.VN", 0.57, "https://fado.vn");
   box(g, 0, 0, 0, 15, 0.3, 9, "concrete", 0.5);
   box(g, 0, 0.3, -1, 12, 4, 6, "white", 0.45);
   box(g, 0, 1, 2.05, 9, 2, 0.12, "glass");
@@ -122,7 +122,7 @@ export function createHub(world) {
     columns: 6,
   });
   box(g, 0, 3.5, 2.8, 13, 0.25, 2.5, "orange");
-  sign(g, "FADO", 0, 4.7, 2.3, 4.5);
+  sign(g, "FADO.VN", 0, 4.7, 2.3, 5.5);
   for (const x of [-5, 5]) cylinder(g, x, 0.3, 3.6, 0.1, 3.2);
   roofDetails(g, 0, 4.42, -1, 7.5, 4.4);
   bollards(g, -4, 3.5, 5, 2);
