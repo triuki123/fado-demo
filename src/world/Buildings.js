@@ -15,7 +15,7 @@ export function district(world, x, z, name, progress) {
   return g;
 }
 export function createHeadquarters(world) {
-  const g = district(world, -30, 14, "FADO Headquarters", 0.2);
+  const g = district(world, -30, 14, "FADO Building", 0.2);
   box(g, 0, 0, 0, 15, 0.35, 12, "concrete", 0.6);
   box(g, 0, 0.35, 0, 10, 13, 7, "glass", 0.5);
   box(g, -4, 0.35, -1, 2, 14, 7, "white", 0.4);
@@ -32,7 +32,7 @@ export function createHeadquarters(world) {
   box(g, 0, 0.56, 4.92, 1.82, 2.2, 0.08, "glass", 0.025);
   box(g, 0, 3.5, 4.5, 7, 0.25, 3, "orange");
   for (const x of [-3, 3]) cylinder(g, x, 0.35, 5.3, 0.09, 3.2);
-  sign(g, "FADO", 0, 11.5, 3.82, 5);
+  sign(g, "FADO Building", 0, 11.5, 3.82, 7.5);
   for (const x of [-5, 5]) {
     box(g, x, 0.5, 5, 1.8, 0.6, 1.5, "white");
     cylinder(g, x, 1.1, 5, 0.7, 0.8, "green", 0.6);
