@@ -79,8 +79,36 @@ for z in [0.82, 1.5, 2.14]:
     for x in [-0.71, 0.71]:
         cube("Door hinge", (x, 2.055, z), (0.12, 0.05, 0.07), DARK, 0.015)
 
-bpy.ops.object.select_all(action="SELECT")
+# Preserve the fully separated, modifier-based source for manual Blender edits.
 bpy.context.preferences.filepaths.save_version = 0
 bpy.ops.wm.save_as_mainfile(filepath=str(ROOT / "assets" / "models" / "fado_truck_source.blend"))
+
+# Apply modifiers and combine parts by material. The detailed source remains
+# editable, while the exported runtime model needs only one draw call/material.
+for obj in list(bpy.context.scene.objects):
+    if obj.type != "MESH":
+        continue
+    bpy.context.view_layer.objects.active = obj
+    obj.select_set(True)
+    for modifier in list(obj.modifiers):
+        bpy.ops.object.modifier_apply(modifier=modifier.name)
+    obj.select_set(False)
+
+for material in [WHITE, ORANGE, DARK, GLASS, TIRE, METAL, LIGHT]:
+    objects = [
+        obj for obj in bpy.context.scene.objects
+        if obj.type == "MESH" and obj.data.materials and obj.data.materials[0] == material
+    ]
+    if not objects:
+        continue
+    bpy.ops.object.select_all(action="DESELECT")
+    for obj in objects:
+        obj.select_set(True)
+    bpy.context.view_layer.objects.active = objects[0]
+    if len(objects) > 1:
+        bpy.ops.object.join()
+    objects[0].name = f"BATCH_{material.name}"
+
+bpy.ops.object.select_all(action="SELECT")
 bpy.ops.export_scene.gltf(filepath=str(OUT), export_format="GLB", use_selection=False, export_apply=True, export_materials="EXPORT", export_yup=True)
 print(f"Exported {OUT}")

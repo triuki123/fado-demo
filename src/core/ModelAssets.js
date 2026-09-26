@@ -5,7 +5,9 @@ const pending = [];
 const truckReady = loader.loadAsync("./assets/models/fado_truck.glb").then((gltf) => {
   gltf.scene.traverse((object) => {
     if (!object.isMesh) return;
-    object.castShadow = true;
+    object.castShadow = ["Body White", "FADO Orange", "Chassis"].includes(
+      object.material?.name,
+    );
     object.receiveShadow = true;
   });
   return gltf.scene;

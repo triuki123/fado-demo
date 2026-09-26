@@ -17,7 +17,7 @@ async function boot() {
   const quality = getQuality(),
     reduced = matchMedia("(prefers-reduced-motion: reduce)").matches,
     debug = new URLSearchParams(location.search).get("debug") === "true";
-  const { scene, camera, renderer, render, environmentReady } =
+  const { scene, camera, renderer, render, environmentReady, setRenderScale } =
     createScene(quality);
   configureSurfaceTextures(renderer, quality);
   progress(35);
@@ -40,7 +40,10 @@ async function boot() {
     start = last,
     frames = 0,
     fps = 60,
-    fpsStart = last;
+    fpsStart = last,
+    lastProgress = 0,
+    movingUntil = 0,
+    reducedForMotion = false;
   const toggle = document.querySelector("#motion-toggle");
   const label = () => {
     toggle.innerHTML = paused
@@ -82,6 +85,14 @@ async function boot() {
     const dt = Math.max(0, Math.min((now - last) / 1000, 0.05));
     last = now;
     scroll.update(now);
+    if (Math.abs(scroll.state.progress - lastProgress) > 0.00002)
+      movingUntil = now + 250;
+    lastProgress = scroll.state.progress;
+    const moving = now < movingUntil;
+    if (moving !== reducedForMotion) {
+      setRenderScale(moving ? quality.motionScale : 1);
+      reducedForMotion = moving;
+    }
     if (!paused) worldTime += dt;
     opening = reduced ? 0 : Math.max(0, 1 - (now - start) / 2200) ** 3;
     const p = path.update(scroll.state.progress, dt, opening, reduced);

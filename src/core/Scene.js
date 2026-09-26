@@ -19,11 +19,12 @@ export function createScene(quality) {
   );
   const renderer = new THREE.WebGLRenderer({
     canvas: document.querySelector("#webgl"),
-    antialias: true,
+    antialias: !quality.aa,
     alpha: true,
     powerPreference: "high-performance",
   });
   renderer.setPixelRatio(Math.min(devicePixelRatio, quality.dpr));
+  const basePixelRatio = Math.min(devicePixelRatio, quality.dpr);
   renderer.setSize(innerWidth, innerHeight);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -75,7 +76,7 @@ export function createScene(quality) {
     composer.addPass(new RenderPass(scene, camera));
     if (quality.ao) {
       const ao = new SSAOPass(scene, camera, innerWidth, innerHeight);
-      ao.kernelRadius = quality.name === "high" ? 7 : 4;
+      ao.kernelRadius = quality.name === "high" ? 5 : 4;
       ao.minDistance = 0.0015;
       ao.maxDistance = 0.065;
       composer.addPass(ao);
@@ -108,6 +109,13 @@ export function createScene(quality) {
     camera,
     renderer,
     environmentReady,
+    setRenderScale: (scale) => {
+      const next = Math.max(0.75, basePixelRatio * scale);
+      if (Math.abs(renderer.getPixelRatio() - next) < 0.02) return;
+      renderer.setPixelRatio(next);
+      renderer.setSize(innerWidth, innerHeight, false);
+      composer?.setSize(innerWidth, innerHeight);
+    },
     render: () => {
       renderer.info.reset();
       if (composer) composer.render();

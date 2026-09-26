@@ -6,6 +6,7 @@ import {
   materials,
   seeded,
   beam,
+  mergeStatic,
 } from "./primitives.js";
 
 export function architecturalVolume(
@@ -152,9 +153,11 @@ export function naturalTree(parent, x, z, height, variant = 0) {
     crown.position.set(cx * height, cy, cz * height);
     crown.scale.set(sx * height, sy * height, sz * height);
     crown.rotation.set(i * 0.18, i * 0.83, i * 0.11);
-    crown.castShadow = crown.receiveShadow = true;
+    crown.castShadow = i < 3;
+    crown.receiveShadow = true;
     tree.add(crown);
   });
+  mergeStatic(tree);
   return tree;
 }
 
