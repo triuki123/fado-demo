@@ -42,7 +42,7 @@ function controlTower(group) {
 }
 
 export function createAirport(world) {
-  const g = district(world, 20, -46, "FADO Air", 0.8);
+  const g = district(world, 20, -46, "FADO Solutions", 0.8);
   // Runway, taxiway and apron occupy separate, readable zones.
   box(g, 0, 0, 0, 52, 0.28, 22, "concrete", 0.7);
   box(g, 0, 0.28, RUNWAY_Z, 47, 0.055, 5.4, "asphalt", 0.06);
@@ -67,7 +67,7 @@ export function createAirport(world) {
   box(g, 8, 4.45, 8, 25, 0.34, 8.4, "orange", 0.12);
   box(g, 8, 4.8, 8, 24.5, 0.28, 8, "roof", 0.12);
   roofDetails(g, 8, 5.08, 8, 19, 5.8);
-  sign(g, "FADO AIR", 8, 3.75, 4.34, 7);
+  sign(g, "FADO Solutions", 8, 3.75, 4.34, 7);
   contactShadow(g, 8, 8, 29, 11, 0.24);
   for (const x of [0, 6, 12]) {
     // Rear edge meets the facade at z=4.4; the bridge extends only onto apron.
