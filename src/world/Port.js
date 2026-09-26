@@ -6,6 +6,7 @@ import {
   instances,
   materials,
   sign,
+  imageSign,
 } from "./primitives.js";
 import { district } from "./Buildings.js";
 import { rail, contactShadow } from "./Details.js";
@@ -92,6 +93,15 @@ export function createPort(world) {
         crane.add(wheel);
       }
     cranes.push(trolley);
+  }
+  const proshipBoard = new THREE.Group();
+  proshipBoard.position.set(-13, 0.32, 4.2);
+  g.add(proshipBoard);
+  box(proshipBoard, 0, 0, 0, 6.8, 4.4, 0.18, "white", 0.12);
+  imageSign(proshipBoard, "assets/proship-logo.png", 0, 2.2, 0.11, 6.45, 4.15);
+  for (const x of [-2.45, 2.45]) {
+    cylinder(proshipBoard, x, -0.62, 0, 0.12, 0.72, "metal", 0.12, 10);
+    box(proshipBoard, x, -0.65, 0, 0.78, 0.12, 0.62, "concrete", 0.05);
   }
   const ship = new THREE.Group();
   ship.position.set(-2, 0.2, 20);

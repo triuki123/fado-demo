@@ -202,6 +202,25 @@ export function sign(parent, text, x, y, z, width = 8, color = "#f36c21") {
   parent.add(m);
   return m;
 }
+export function imageSign(parent, url, x, y, z, width, height) {
+  const material = new THREE.MeshBasicMaterial({
+    transparent: true,
+    alphaTest: 0.02,
+    side: THREE.DoubleSide,
+    depthWrite: false,
+  });
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(width, height), material);
+  mesh.position.set(x, y, z);
+  mesh.renderOrder = 2;
+  parent.add(mesh);
+  new THREE.TextureLoader().load(url, (texture) => {
+    texture.colorSpace = THREE.SRGBColorSpace;
+    material.map = texture;
+    material.needsUpdate = true;
+  });
+  return mesh;
+}
+
 export function instances(
   parent,
   geometry,
