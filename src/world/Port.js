@@ -1,5 +1,12 @@
 import * as THREE from "three";
-import { box, beam, instances, materials, sign } from "./primitives.js";
+import {
+  box,
+  beam,
+  cylinder,
+  instances,
+  materials,
+  sign,
+} from "./primitives.js";
 import { district } from "./Buildings.js";
 import { rail, contactShadow } from "./Details.js";
 export function createPort(world) {
