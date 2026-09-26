@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#081627" />
+    <meta
+      name="description"
+      content="FADO — nền tảng vận hành doanh nghiệp thông minh."
+    />
+    <title>FADO — Nền tảng vận hành thông minh</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="style.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/",
+          "gsap": "https://cdn.jsdelivr.net/npm/gsap@3.12.5/index.js",
+          "gsap/ScrollTrigger": "https://cdn.jsdelivr.net/npm/gsap@3.12.5/ScrollTrigger.js",
+          "lenis": "https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.mjs"
+        }
+      }
+    </script>
+  </head>
+  <body class="loading">
+    <div id="loader" role="status">
+      <div class="loader-brand">FADO</div>
+      <div class="loader-bottom">
+        <span>INTELLIGENT BUSINESS OPERATIONS PLATFORM</span
+        ><span id="load-progress">0%</span>
+      </div>
+      <div class="loader-track"><i id="load-bar"></i></div>
+      <p id="load-error" hidden>
+        We couldn't open the 3D experience. Check your connection and
+        <button onclick="location.reload()">try again</button>.
+      </p>
+    </div>
+    <div class="sky" aria-hidden="true"></div>
+    <canvas
+      id="webgl"
+      aria-label="Interactive logistics city. Explore using the destination navigation."
+    ></canvas>
+    <div class="scene-wash"></div>
+    <header id="header">
+      <a class="brand" href="#" aria-label="FADO home"
+        ><span class="brand-fado">FADO</span></a
+      >
+      <nav aria-label="Điều hướng chính">
+        <a href="#platform" data-section="#platform">Nền tảng</a
+        ><a href="#capabilities" data-section="#capabilities">Năng lực</a
+        ><a href="#about" data-section="#about">Về FADO</a>
+      </nav>
+      <button class="contact-link" id="contact-open">
+        Khám phá <span>↗</span>
+      </button>
+    </header>
+    <main id="story" aria-live="polite">
+      <div class="eyebrow">
+        <span></span
+        ><span id="eyebrow">FADO / VẬN HÀNH THÔNG MINH</span>
+      </div>
+      <h1 id="title">
+        VẬN HÀNH<br />RÕ RÀNG.<br /><em>ĐÚNG NHỊP.</em>
+      </h1>
+      <p id="description">
+        Nền tảng vận hành doanh nghiệp thông minh, kết nối dữ liệu, tài sản và quy trình trong cùng một luồng công việc.
+      </p>
+      <button class="explore" id="explore">
+        KHÁM PHÁ NỀN TẢNG <span>↗</span>
+      </button>
+    </main>
+    <aside class="world-caption">
+      <span class="live-dot"></span> FADO LIVE MODEL
+      <span class="caption-divider">/</span>
+      <span id="district-name">VẬN HÀNH KẾT NỐI</span>
+    </aside>
+    <nav id="destinations" aria-label="Explore destinations"></nav>
+    <footer>
+      <span class="scroll-hint">SCROLL TO DISCOVER <span>↓</span></span
+      ><span class="journey"
+        ><b id="chapter">00</b><span>/ 07</span
+        ><i><span id="journey-progress"></span></i></span
+      ><button id="motion-toggle" aria-pressed="false">
+        Pause motion <span>Ⅱ</span>
+      </button>
+    </footer>
+    <div id="scroll-space" aria-hidden="true"></div>
+    <section class="landing" id="about">
+      <div class="section-kicker">FADO / INTELLIGENT BUSINESS OPERATIONS PLATFORM</div>
+      <div class="intro-grid">
+        <h2>Một nền tảng.<br /><em>Một luồng vận hành.</em></h2>
+        <p>FADO quy tụ thông tin và hoạt động cốt lõi để đội ngũ nhìn rõ công việc, phối hợp chủ động và đưa ra quyết định có cơ sở.</p>
+      </div>
+      <div class="stats" aria-label="Giá trị nền tảng">
+        <article><strong>RÕ</strong><span>Nhìn được trạng thái vận hành</span></article>
+        <article><strong>LIỀN</strong><span>Kết nối các điểm chạm công việc</span></article>
+        <article><strong>NHANH</strong><span>Ra quyết định với dữ liệu tập trung</span></article>
+      </div>
+    </section>
+    <section class="landing services" id="platform">
+      <div class="section-kicker">FADO</div>
+      <h2>Biến vận hành phức tạp<br /><em>thành luồng công việc rõ ràng.</em></h2>
+      <div class="service-grid">
+        <article><span>01</span><h3>Dữ liệu tập trung</h3><p>Đưa thông tin cần thiết về cùng một nơi để đội ngũ có chung ngữ cảnh khi làm việc.</p></article>
+        <article><span>02</span><h3>Quy trình kết nối</h3><p>Liên kết các bước vận hành để công việc chuyển tiếp mạch lạc giữa con người và bộ phận.</p></article>
+        <article><span>03</span><h3>Hiển thị trực quan</h3><p>Theo dõi trạng thái và nhận diện điểm cần chú ý bằng góc nhìn trực quan, dễ dùng.</p></article>
+      </div>
+    </section>
+    <section class="landing process" id="capabilities">
+      <div class="section-kicker">CÁCH NỀN TẢNG HỖ TRỢ VẬN HÀNH</div>
+      <div class="process-layout">
+        <h2>Từ dữ liệu thô<br />đến <em>hành động có cơ sở.</em></h2>
+        <ol>
+          <li><b>01</b><div><h3>Ghi nhận</h3><p>Tập hợp dữ liệu và trạng thái công việc ở những điểm chạm quan trọng.</p></div></li>
+          <li><b>02</b><div><h3>Kết nối</h3><p>Tạo góc nhìn chung để đội ngũ phối hợp cùng một nhịp.</p></div></li>
+          <li><b>03</b><div><h3>Điều hành</h3><p>Dùng thông tin rõ ràng để ưu tiên việc cần làm và theo dõi tiến độ.</p></div></li>
+        </ol>
+      </div>
+    </section>
+    <section class="landing final-cta">
+      <div class="section-kicker">FADO</div>
+      <h2>Vận hành thông minh<br /><em>bắt đầu từ góc nhìn rõ ràng.</em></h2>
+      <button class="explore" id="landing-contact">KHÁM PHÁ FADO <span>↗</span></button>
+    </section>
+    <div id="tooltip" hidden></div>
+    <dialog id="info">
+      <button class="close" aria-label="Close details">×</button>
+      <div class="eyebrow">THE FADO ECOSYSTEM</div>
+      <h2 id="info-title"></h2>
+      <p id="info-description"></p>
+      <button class="explore" id="info-explore">
+        EXPLORE THIS DESTINATION <span>↗</span>
+      </button>
+    </dialog>
+    <dialog id="contact">
+      <button class="close" aria-label="Close contact">×</button>
+      <div class="eyebrow">FADO</div>
+      <h2>Vận hành rõ ràng hơn.</h2>
+      <p>
+        Khám phá Intelligent Business Operations Platform của FADO.
+      </p>
+    </dialog>
+    <pre id="debug" hidden></pre>
+    <noscript
+      ><div class="no-script">
+        Enable JavaScript to explore FADO's interactive logistics world.
+      </div></noscript
+    >
+    <script>
+      window.addEventListener("error", () => {
+        document.querySelector("#load-error").hidden = false;
+      });
+      window.addEventListener("unhandledrejection", () => {
+        document.querySelector("#load-error").hidden = false;
+      });
+    </script>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
