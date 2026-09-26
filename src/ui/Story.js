@@ -171,6 +171,7 @@ export function createStory(scroll) {
     });
     if (index === current) return;
     current = index;
+    document.body.dataset.chapter = chapters[current].id;
     const story = document.querySelector("#story");
     story.classList.add("changing");
     clearTimeout(pending);

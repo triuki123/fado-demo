@@ -8,6 +8,7 @@ import {
   beam,
   mergeStatic,
   setGeometryQuality,
+  sign,
 } from "./primitives.js";
 import {
   createHeadquarters,
@@ -26,6 +27,16 @@ export function createWorld(scene, quality) {
   const world = new THREE.Group();
   scene.add(world);
   addEcosystemModel(world);
+  const digitalSign = sign(world, "FADO DIGITAL", 1, 2.35, 3.28, 4.8);
+  const technologySign = sign(
+    world,
+    "FADO TECHNOLOGY",
+    -12,
+    2.6,
+    3.18,
+    5.4,
+  );
+  digitalSign.userData.dynamic = technologySign.userData.dynamic = true;
   const seg = quality.name === "high" ? [36, 28] : [24, 18];
   const seaGeo = new THREE.PlaneGeometry(260, 220, seg[0], seg[1]);
   const water = new THREE.Mesh(seaGeo, materials.water);
@@ -133,7 +144,8 @@ export function createWorld(scene, quality) {
   );
   // Repeated landscape and architecture are drawn in batches.
   const random = seeded(),
-    shrubs = [];
+    shrubs = [],
+    scenicTrees = [];
   const landscape = [
     [-41, 4, 3.2],
     [-41, 24, 2.8],
@@ -176,7 +188,9 @@ export function createWorld(scene, quality) {
   ];
   landscape.forEach(([x, z, h], index) => {
     const r = Math.abs(Math.sin(x * 12.9898 + z * 78.233) * 43758.5453) % 1;
-    naturalTree(world, x, z, h * (0.9 + r * 0.18), index);
+    scenicTrees.push(
+      naturalTree(world, x, z, h * (0.9 + r * 0.18), index),
+    );
     shrubs.push({ p: [x + 0.68, 0.38, z + 0.68], s: [0.72, 0.38, 0.72] });
   });
   const shrubGeo = organicShrubGeometry();
@@ -346,16 +360,29 @@ export function createWorld(scene, quality) {
       );
       const routeStarts = [0.1, 0.21, 0.31, 0.4, 0.5, 0.61, 0.71];
       routeMaterials.forEach((material, i) => {
-        material.opacity =
-          0.06 +
-          THREE.MathUtils.smoothstep(
+        const entered = THREE.MathUtils.smoothstep(
             progress,
             routeStarts[i],
-            routeStarts[i] + 0.055,
-          ) *
-            0.48;
+            routeStarts[i] + 0.025,
+          ),
+          next = routeStarts[i + 1] ?? 0.81,
+          passed = THREE.MathUtils.smoothstep(progress, next, next + 0.025);
+        material.opacity =
+          progress >= 0.91 ? 0.42 : 0.015 + entered * 0.52 - passed * 0.44;
       });
       particles.rotation.y = time * 0.002;
+      const aerial = progress < 0.075 || progress >= 0.9;
+      if (aerial !== world.userData.aerialShadowsReduced) {
+        scenicTrees.forEach((tree) =>
+          tree.traverse((object) => {
+            if (object.isMesh) object.castShadow = !aerial;
+          }),
+        );
+        world.userData.aerialShadowsReduced = aerial;
+        scene.traverse((object) => {
+          if (object.isLight && object.shadow) object.shadow.needsUpdate = true;
+        });
+      }
     },
   };
 }

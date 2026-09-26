@@ -35,7 +35,7 @@ export const journeyStops = [
   {
     id: "digital",
     at: 0.31,
-    position: [16, 11, 13],
+    position: [19, 13, 18],
     target: [1, 2.2, 0],
     fov: 41,
     name: "FADO DIGITAL",
@@ -46,7 +46,7 @@ export const journeyStops = [
   {
     id: "technology",
     at: 0.4,
-    position: [-1, 12, 14],
+    position: [2, 14, 18],
     target: [-12, 2.4, 0],
     fov: 40,
     name: "FADO TECHNOLOGY",

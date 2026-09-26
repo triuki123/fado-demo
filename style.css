@@ -74,6 +74,19 @@ a:focus-visible {
     #3d1c0700 52%
   );
 }
+body[data-chapter="digital"] .scene-wash,
+body[data-chapter="technology"] .scene-wash {
+  background: linear-gradient(
+    90deg,
+    #3d1c07e8 0%,
+    #3d1c079d 22%,
+    #3d1c0700 40%
+  );
+}
+body[data-chapter="digital"] #story,
+body[data-chapter="technology"] #story {
+  width: 36%;
+}
 header {
   position: fixed;
   z-index: 4;
@@ -807,6 +820,19 @@ dialog p {
       #3d1c07aa 40%,
       #3d1c0700 70%
     );
+  }
+  body[data-chapter="digital"] .scene-wash,
+  body[data-chapter="technology"] .scene-wash {
+    background: linear-gradient(
+      0deg,
+      #3d1c07f2 0%,
+      #3d1c07a0 36%,
+      #3d1c0700 66%
+    );
+  }
+  body[data-chapter="digital"] #story,
+  body[data-chapter="technology"] #story {
+    width: 90%;
   }
   .story-actions {
     gap: 10px;
