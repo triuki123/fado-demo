@@ -77,6 +77,7 @@ async function boot() {
     document.querySelector("#loader").classList.remove("done");
     document.querySelector("#load-error").hidden = false;
   });
+  let lastP = -1;
   function tick(now) {
     requestAnimationFrame(tick);
     if (document.hidden) return;
@@ -98,7 +99,9 @@ async function boot() {
     const p = path.update(scroll.state.progress, dt, opening, reduced);
     world.update(worldTime, p);
     story(p);
-    if (frames % 3 === 0) interaction();
+    const cameraMoved = Math.abs(p - lastP) > 0.0005;
+    lastP = p;
+    if (frames % 3 === 0) interaction(cameraMoved);
     render();
     frames++;
     if (now - fpsStart > 700) {

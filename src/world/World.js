@@ -24,7 +24,8 @@ export function createWorld(scene, quality) {
   setGeometryQuality(quality.name);
   const world = new THREE.Group();
   scene.add(world);
-  const seaGeo = new THREE.PlaneGeometry(260, 220, 48, 40);
+  const seg = quality.name === "high" ? [36, 28] : [24, 18];
+  const seaGeo = new THREE.PlaneGeometry(260, 220, seg[0], seg[1]);
   const water = new THREE.Mesh(seaGeo, materials.water);
   water.rotation.x = -Math.PI / 2;
   water.position.y = -1.55;
@@ -261,6 +262,7 @@ export function createWorld(scene, quality) {
     beam(world, [x, 1.35, -16], [x, 1.35, -10], 0.06, "metal");
   interactive.forEach((group) => mergeStatic(group));
   mergeStatic(world, [...dots, ...cartons]);
+  let waveFrame = 0;
   return {
     world,
     interactive,
@@ -269,13 +271,16 @@ export function createWorld(scene, quality) {
         (carton, i) =>
           (carton.position.z = -15.6 + ((time * 0.45 + i * 1.35) % 5.2)),
       );
-      for (let i = 0; i < seaPos.count; i++)
-        seaPos.setZ(
-          i,
-          Math.sin(seaBase[i * 3] * 0.09 + time * 0.5) * 0.14 +
-            Math.cos(seaBase[i * 3 + 1] * 0.11 + time * 0.35) * 0.1,
-        );
-      seaPos.needsUpdate = true;
+      waveFrame++;
+      if (waveFrame % 2 === 0) {
+        for (let i = 0; i < seaPos.count; i++)
+          seaPos.setZ(
+            i,
+            Math.sin(seaBase[i * 3] * 0.09 + time * 0.5) * 0.14 +
+              Math.cos(seaBase[i * 3 + 1] * 0.11 + time * 0.35) * 0.1,
+          );
+        seaPos.needsUpdate = true;
+      }
       clouds.forEach((cloud, i) => {
         cloud.position.x += 0.008 + i * 0.001;
         if (cloud.position.x > 90) cloud.position.x = -90;

@@ -2,16 +2,18 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 const loader = new GLTFLoader();
 const pending = [];
-const truckReady = loader.loadAsync("./assets/models/fado_truck.glb").then((gltf) => {
-  gltf.scene.traverse((object) => {
-    if (!object.isMesh) return;
-    object.castShadow = ["Body White", "FADO Orange", "Chassis"].includes(
-      object.material?.name,
-    );
-    object.receiveShadow = true;
+const truckReady = loader
+  .loadAsync("./assets/models/fado_truck.glb")
+  .then((gltf) => {
+    gltf.scene.traverse((object) => {
+      if (!object.isMesh) return;
+      object.castShadow = ["Body White", "FADO Orange", "Chassis"].includes(
+        object.material?.name,
+      );
+      object.receiveShadow = true;
+    });
+    return gltf.scene;
   });
-  return gltf.scene;
-});
 
 export function replaceWithTruckModel(anchor) {
   const task = truckReady.then((source) => {

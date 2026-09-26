@@ -7,7 +7,8 @@ export function createInteraction(camera, objects, scroll) {
     tooltip = document.querySelector("#tooltip");
   let hovered = null,
     down = null,
-    clicked = null;
+    clicked = null,
+    pointerMoved = true;
   const halo = new THREE.Mesh(
     new THREE.RingGeometry(6, 6.13, 64),
     new THREE.MeshBasicMaterial({
@@ -34,9 +35,11 @@ export function createInteraction(camera, objects, scroll) {
     );
     tooltip.style.left = `${Math.min(e.clientX + 16, innerWidth - 180)}px`;
     tooltip.style.top = `${e.clientY + 16}px`;
+    pointerMoved = true;
   });
   canvas.addEventListener("pointerleave", () => {
     pointer.set(5, 5);
+    pointerMoved = true;
   });
   canvas.addEventListener(
     "pointerdown",
@@ -73,7 +76,9 @@ export function createInteraction(camera, objects, scroll) {
     }
     scroll.go(clicked.userData.progress);
   };
-  return () => {
+  return (cameraMoved = false) => {
+    if (!pointerMoved && !cameraMoved) return;
+    pointerMoved = false;
     const obj = pick();
     hovered = obj;
     canvas.style.cursor = obj ? "pointer" : "";

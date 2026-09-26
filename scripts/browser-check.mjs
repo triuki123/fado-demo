@@ -3,7 +3,11 @@ import { mkdir, writeFile } from "node:fs/promises";
 const browser = await chromium.launch({
   channel: "chrome",
   headless: true,
-  args: ["--enable-webgl", "--ignore-gpu-blocklist", "--enable-unsafe-swiftshader"],
+  args: [
+    "--enable-webgl",
+    "--ignore-gpu-blocklist",
+    "--enable-unsafe-swiftshader",
+  ],
 });
 console.log("Chrome launched");
 await mkdir("artifacts", { recursive: true });

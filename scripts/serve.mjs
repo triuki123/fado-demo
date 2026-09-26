@@ -35,5 +35,7 @@ http
     }
   })
   .listen(port, "0.0.0.0", () =>
-    console.log(`Local: http://127.0.0.1:${port}\nLAN: http://<máy-chủ>:${port}`),
+    console.log(
+      `Local: http://127.0.0.1:${port}\nLAN: http://<máy-chủ>:${port}`,
+    ),
   );

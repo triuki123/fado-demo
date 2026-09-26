@@ -54,7 +54,17 @@ export function truck(parent, kind = "truck", color = "orange") {
   const cab = truckCab("white");
   cab.position.set(0, 0.67, length / 2 + 0.54);
   g.add(cab);
-  const windshield = box(g, 0, 1.5, length / 2 + 1.26, 1.16, 0.48, 0.045, "glass", 0.08);
+  const windshield = box(
+    g,
+    0,
+    1.5,
+    length / 2 + 1.26,
+    1.16,
+    0.48,
+    0.045,
+    "glass",
+    0.08,
+  );
   windshield.rotation.x = -0.14;
   box(g, -0.81, 1.27, length / 2 + 0.56, 0.035, 0.45, 0.72, "glass", 0.01);
   box(g, 0.81, 1.27, length / 2 + 0.56, 0.035, 0.45, 0.72, "glass", 0.01);

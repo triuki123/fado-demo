@@ -17,7 +17,14 @@ export function district(world, x, z, name, progress, url = null) {
   return g;
 }
 export function createHeadquarters(world) {
-  const g = district(world, -30, 14, "FADO Group", 0.2, "https://ecosys.fadoai.com");
+  const g = district(
+    world,
+    -30,
+    14,
+    "FADO Group",
+    0.2,
+    "https://ecosys.fadoai.com",
+  );
   box(g, 0, 0, 0, 15, 0.35, 12, "concrete", 0.6);
   architecturalVolume(g, 0, 0.35, 0, 10, 13, 7, "glass", 0.75);
   architecturalVolume(g, -4, 0.35, -1, 2, 14, 7, "white", 0.38);
@@ -75,7 +82,14 @@ export function createCommerce(world) {
   return g;
 }
 export function createWarehouse(world) {
-  const g = district(world, -26, -18, "FADO Agri", 0.48, "https://fadoagri.com");
+  const g = district(
+    world,
+    -26,
+    -18,
+    "FADO Agri",
+    0.48,
+    "https://fadoagri.com",
+  );
   box(g, 0, 0, 0, 22, 0.3, 18, "concrete", 0.5);
   architecturalVolume(g, 0, 0.3, -1, 19, 5.2, 12, "white", 0.3);
   gabledRoof(g, 0, 5.52, -1, 20, 13, 1.15);

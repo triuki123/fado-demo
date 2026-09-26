@@ -42,7 +42,14 @@ function controlTower(group) {
 }
 
 export function createAirport(world) {
-  const g = district(world, 20, -46, "fadosolution.com", 0.8, "https://fadosolution.com");
+  const g = district(
+    world,
+    20,
+    -46,
+    "fadosolution.com",
+    0.8,
+    "https://fadosolution.com",
+  );
   // Runway, taxiway and apron occupy separate, readable zones.
   box(g, 0, 0, 0, 52, 0.28, 22, "concrete", 0.7);
   box(g, 0, 0.28, RUNWAY_Z, 47, 0.055, 5.4, "asphalt", 0.06);

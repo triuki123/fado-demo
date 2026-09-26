@@ -46,7 +46,7 @@ export function createCameraPath(camera, scene, debug) {
     curve,
     look,
     update(target, dt, opening, reduce) {
-      progress = THREE.MathUtils.damp(progress, target, reduce ? 18 : 3.2, dt);
+      progress = THREE.MathUtils.damp(progress, target, reduce ? 18 : 4.8, dt);
       let index = cameraPoints.findIndex(
         (p, i) =>
           i < cameraPoints.length - 1 &&
@@ -73,9 +73,9 @@ export function createCameraPath(camera, scene, debug) {
       desiredPosition.z += opening * 28;
       camera.position.lerp(
         desiredPosition,
-        1 - Math.exp(-dt * (reduce ? 22 : 5.5)),
+        1 - Math.exp(-dt * (reduce ? 22 : 7.5)),
       );
-      look.lerp(aim, 1 - Math.exp(-dt * (reduce ? 22 : 6)));
+      look.lerp(aim, 1 - Math.exp(-dt * (reduce ? 22 : 8)));
       camera.lookAt(look);
       camera.setViewOffset(
         innerWidth,

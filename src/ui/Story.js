@@ -60,8 +60,7 @@ export const chapters = [
     name: "FADO",
     eyebrow: "07 / INTELLIGENT BUSINESS OPERATIONS PLATFORM",
     title: "DỮ LIỆU.<br>QUY TRÌNH.<br><em>HÀNH ĐỘNG.</em>",
-    description:
-      "FADO — Intelligent Business Operations Platform.",
+    description: "FADO — Intelligent Business Operations Platform.",
   },
 ];
 export function createStory(scroll) {
@@ -102,7 +101,8 @@ export function createStory(scroll) {
       : scroll.go(chapters[current + 1].at + 0.035);
   const contact = document.querySelector("#contact");
   document.querySelector("#contact-open").onclick = () => contact.showModal();
-  document.querySelector("#landing-contact").onclick = () => contact.showModal();
+  document.querySelector("#landing-contact").onclick = () =>
+    contact.showModal();
   document.querySelectorAll("dialog").forEach((dialog) => {
     dialog.querySelector(".close").onclick = () => dialog.close();
     dialog.addEventListener("click", (e) => {
@@ -118,6 +118,30 @@ export function createStory(scroll) {
       }
     });
   });
+  const backToTop = document.querySelector("#back-to-top");
+  if (backToTop) {
+    backToTop.onclick = () => scroll.go(0);
+  }
+  const btnPrev = document.querySelector("#story-prev");
+  const btnNext = document.querySelector("#story-next");
+  if (btnPrev) {
+    btnPrev.onclick = () => {
+      const prevIdx = Math.max(0, current - 1);
+      scroll.go(
+        prevIdx === 7 ? 1 : chapters[prevIdx].at + (prevIdx === 0 ? 0 : 0.035),
+      );
+    };
+  }
+  if (btnNext) {
+    btnNext.onclick = () => {
+      if (current === 7) {
+        document.querySelector("#contact").showModal();
+      } else {
+        const nextIdx = Math.min(chapters.length - 1, current + 1);
+        scroll.go(nextIdx === 7 ? 1 : chapters[nextIdx].at + 0.035);
+      }
+    };
+  }
   return (progress) => {
     const index = chapters.findLastIndex((c) => progress >= c.at);
     document.querySelector("#journey-progress").style.width =
@@ -125,6 +149,12 @@ export function createStory(scroll) {
     document
       .querySelector("#header")
       .classList.toggle("scrolled", progress > 0.025);
+    if (backToTop) {
+      backToTop.classList.toggle("visible", progress > 0.035);
+    }
+    if (btnPrev) {
+      btnPrev.disabled = index === 0;
+    }
     [...nav.children].forEach((b, i) => {
       b.classList.toggle("active", i === index);
       b.setAttribute("aria-current", i === index ? "step" : "false");
